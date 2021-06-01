@@ -1,4 +1,4 @@
-﻿namespace GamesStore.Models
+﻿namespace Model
 {
     using System;
     using System.Collections.Generic;

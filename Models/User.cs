@@ -1,4 +1,4 @@
-﻿namespace GamesStore.Models
+﻿namespace Model
 {
     using System;
     using System.Collections.Generic;
@@ -8,8 +8,16 @@
 
     using Microsoft.AspNetCore.Identity;
 
-    public class User : IdentityUser
+    using Model.Interfaces;
+
+    public class User : IdentityUser, ICreationTimestamp
     {
+        public User()
+            : base()
+        {
+            this.CreatedAtUtc = DateTime.UtcNow;
+        }
+
         [Required]
         [MinLength(2)]
         [Display(Name = "First name")]
@@ -26,5 +34,7 @@
         public string DeliveryAddress { get; set; }
 
         public List<Order> Orders { get; set; }
+
+        public DateTime CreatedAtUtc { get; set; }
     }
 }

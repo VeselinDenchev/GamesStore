@@ -1,4 +1,4 @@
-﻿namespace GamesStore.Models
+﻿namespace Model
 {
     using System;
     using System.Collections.Generic;
@@ -10,9 +10,7 @@
 
     public class Order : BaseModel
     {
-        private decimal totalPrice;
-
-        public string UserId { get; set; }
+        private decimal totalPrice = 0;
 
         public User User { get; set; }
 
@@ -41,7 +39,7 @@
                     totalGamesPrice += Constant.DELIVERY_TAX;
                 }
 
-                value = totalGamesPrice;
+                this.totalPrice = totalGamesPrice;
             }
         }
 

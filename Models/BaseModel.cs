@@ -1,4 +1,4 @@
-﻿namespace GamesStore.Models
+﻿namespace Model
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public abstract class BaseModel
+    using Model.Interfaces;
+
+    public abstract class BaseModel : ICreationTimestamp
     {
         public BaseModel()
         {
@@ -17,6 +19,6 @@
         [Key]
         public string Id { get; set; }
 
-        public DateTime CreatedAtUtc { get; protected set; }
+        public DateTime CreatedAtUtc { get; set; }
     }
 }

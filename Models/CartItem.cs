@@ -1,4 +1,4 @@
-﻿namespace GamesStore.Models
+﻿namespace Model
 {
     using System;
     using System.Collections.Generic;
@@ -8,6 +8,8 @@
 
     public class CartItem : BaseModel
     {
+        public User User { get; set; }
+
         public string GameId { get; set; }
 
         public Game GameInCart { get; set; }
