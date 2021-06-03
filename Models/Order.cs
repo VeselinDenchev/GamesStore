@@ -19,6 +19,7 @@
         [Display(Name = "Discount code")]
         public DiscountCode DiscountCode { get; set; }
 
+        [Display(Name = "Total")]
         public decimal TotalPrice 
         {
             get

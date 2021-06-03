@@ -7,6 +7,7 @@ namespace GamesStore
 
     using Data;
 
+    using GamesStore.Services;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -62,6 +63,8 @@ namespace GamesStore
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
             });
+
+            services.AddTransient<GameService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
