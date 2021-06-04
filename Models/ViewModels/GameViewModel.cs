@@ -1,14 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Model.Interfaces;
+
 namespace Model.ViewModels
 {
-    public class GameViewModel : BaseModel
+    public class GameViewModel : BaseModel, IModificationTimestamp
     {
+        public GameViewModel()
+        {
+            this.ModifiedAtUtc = this.CreatedAtUtc;
+        }
+
         [Required]
         public string Name { get; set; }
 
@@ -39,5 +47,8 @@ namespace Model.ViewModels
 
         [Required]
         public int Quantity { get; set; }
+
+        [ReadOnly(true)]
+        public DateTime ModifiedAtUtc { get; set; }
     }
 }

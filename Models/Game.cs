@@ -2,12 +2,21 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class Game : BaseModel
+    using Model.Interfaces;
+
+    public class Game : BaseModel, IModificationTimestamp
     {
+        public Game()
+            : base()
+        {
+            this.ModifiedAtUtc = this.CreatedAtUtc;
+        }
+
         [Required]
         public string Name { get; set; }
 
@@ -38,5 +47,8 @@
 
         [Required]
         public int Quantity { get; set; }
+
+        [ReadOnly(true)]
+        public DateTime ModifiedAtUtc { get; set; }
     }
 }

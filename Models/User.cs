@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
@@ -10,12 +11,13 @@
 
     using Model.Interfaces;
 
-    public class User : IdentityUser, ICreationTimestamp
+    public class User : IdentityUser, ICreationTimestamp, IModificationTimestamp
     {
         public User()
             : base()
         {
             this.CreatedAtUtc = DateTime.UtcNow;
+            this.ModifiedAtUtc = this.CreatedAtUtc;
         }
 
         [Required]
@@ -35,6 +37,10 @@
 
         public List<Order> Orders { get; set; }
 
+        [ReadOnly(true)]
         public DateTime CreatedAtUtc { get; set; }
+
+        [ReadOnly(true)]
+        public DateTime ModifiedAtUtc { get; set; }
     }
 }

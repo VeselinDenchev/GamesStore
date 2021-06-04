@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(GamesStoreDbContext))]
-    partial class GamesStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210604085105_Add_ModifiedAtUtc_property_to_User_Game_and_DiscountCode")]
+    partial class Add_ModifiedAtUtc_property_to_User_Game_and_DiscountCode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

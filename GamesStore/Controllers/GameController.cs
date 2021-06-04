@@ -14,7 +14,6 @@ namespace GamesStore.Controllers
 {
     public class GameController : Controller
     {
-        //private readonly GamesStoreDbContext _context;
         private readonly GameService _service;
 
         public GameController(GameService service)
@@ -23,31 +22,25 @@ namespace GamesStore.Controllers
         }
 
         // GET: Game
-        //async
         public IActionResult Index()
         {
             List<GameViewModel> games = _service.LoadAllGames();
 
             return View(games);
         }
-        /*
-        // GET: Game/Details/5
-        public async Task<IActionResult> Details(string id)
+        
+        // GET: Game/Details
+        public IActionResult Details(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            GameViewModel game = _service.CheckIfGameIdIsValid(id);
 
-            var game = await _context.Games
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (game == null)
+            if (game is null)
             {
                 return NotFound();
             }
 
             return View(game);
-        }*/
+        }
 
         // GET: Game/Create
         public IActionResult Create()
@@ -55,10 +48,7 @@ namespace GamesStore.Controllers
             return View();
         }
 
-        //async
         // POST: Game/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(GameViewModel game)
@@ -66,94 +56,63 @@ namespace GamesStore.Controllers
             if (ModelState.IsValid)
             {
                 _service.CreateGame(game);
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(game);
         }
-        /*
-        // GET: Game/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        
+        // GET: Game/Edit
+        public IActionResult Edit(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            GameViewModel game = _service.CheckIfGameIdIsValid(id);
 
-            var game = await _context.Games.FindAsync(id);
-            if (game == null)
-            {
-                return NotFound();
-            }
             return View(game);
         }
-
+        
         // POST: Game/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Name,Platform,ImgUrl,Developer,AgeRating,Description,YearOfRelease,Price,Quantity,Id,CreatedAtUtc")] Game game)
+        public IActionResult Edit(GameViewModel game)
         {
-            if (id != game.Id)
+            if (game is null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(game);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GameExists(game.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(game);
+            _service.SaveEditedGame(game);
+
+            return RedirectToAction(nameof(Index));
+
+            //return View(game);
         }
-
-        // GET: Game/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        
+        // GET: Game/Delete
+        public IActionResult Delete(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var game = await _context.Games
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (game == null)
-            {
-                return NotFound();
-            }
+            GameViewModel game = _service.CheckIfGameIdIsValid(id);
 
             return View(game);
         }
-
-        // POST: Game/Delete/5
+        
+        // POST: Game/Delete/
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public IActionResult DeleteConfirmed(GameViewModel game)
         {
-            var game = await _context.Games.FindAsync(id);
-            _context.Games.Remove(game);
-            await _context.SaveChangesAsync();
+            _service.DeleteGame(game);
+
             return RedirectToAction(nameof(Index));
         }
 
         private bool GameExists(string id)
         {
-            return _context.Games.Any(e => e.Id == id);
-        }*/
+            bool exists = _service.CheckIfGameExists(id);
+
+            return exists;
+        }
     }
 }
