@@ -194,8 +194,8 @@ namespace Data.Migrations
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<short>("DiscountPercentage")
-                        .HasColumnType("smallint");
+                    b.Property<byte>("DiscountPercantage")
+                        .HasColumnType("tinyint");
 
                     b.Property<DateTime>("ModifiedAtUtc")
                         .HasColumnType("datetime2");
@@ -210,8 +210,8 @@ namespace Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<short>("AgeRating")
-                        .HasColumnType("smallint");
+                    b.Property<byte>("AgeRating")
+                        .HasColumnType("tinyint");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");

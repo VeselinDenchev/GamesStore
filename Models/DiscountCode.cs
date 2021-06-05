@@ -22,8 +22,7 @@
         public string Code { get; set; }
 
         [Required]
-        [Range(0, 100)]
-        public sbyte DiscountPercentage { get; set; }
+        public byte DiscountPercantage { get; set; }
 
         [ReadOnly(true)]
         public DateTime ModifiedAtUtc { get; set; }

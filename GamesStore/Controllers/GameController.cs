@@ -14,17 +14,17 @@ namespace GamesStore.Controllers
 {
     public class GameController : Controller
     {
-        private readonly GameService gameService;
+        private readonly GameService _service;
 
         public GameController(GameService service)
         {
-            gameService = service;
+            _service = service;
         }
 
         // GET: Game
         public IActionResult Index()
         {
-            List<GameViewModel> games = gameService.LoadAllGames();
+            List<GameViewModel> games = _service.LoadAllGames();
 
             return View(games);
         }
@@ -32,7 +32,7 @@ namespace GamesStore.Controllers
         // GET: Game/Details
         public IActionResult Details(string id)
         {
-            GameViewModel game = gameService.CheckIfGameIdIsValid(id);
+            GameViewModel game = _service.CheckIfGameIdIsValid(id);
 
             if (game is null)
             {
@@ -55,7 +55,7 @@ namespace GamesStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                gameService.CreateGame(game);
+                _service.CreateGame(game);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -66,12 +66,12 @@ namespace GamesStore.Controllers
         // GET: Game/Edit
         public IActionResult Edit(string id)
         {
-            GameViewModel game = gameService.CheckIfGameIdIsValid(id);
+            GameViewModel game = _service.CheckIfGameIdIsValid(id);
 
             return View(game);
         }
         
-        // POST: Game/Edit
+        // POST: Game/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -83,7 +83,7 @@ namespace GamesStore.Controllers
                 return NotFound();
             }
 
-            gameService.SaveEditedGame(game);
+            _service.SaveEditedGame(game);
 
             return RedirectToAction(nameof(Index));
 
@@ -93,26 +93,26 @@ namespace GamesStore.Controllers
         // GET: Game/Delete
         public IActionResult Delete(string id)
         {
-            GameViewModel game = gameService.CheckIfGameIdIsValid(id);
+            GameViewModel game = _service.CheckIfGameIdIsValid(id);
 
             return View(game);
         }
         
-        // POST: Game/Delete
+        // POST: Game/Delete/
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(GameViewModel game)
         {
-            gameService.DeleteGame(game);
+            _service.DeleteGame(game);
 
             return RedirectToAction(nameof(Index));
         }
-        /*
+
         private bool GameExists(string id)
         {
             bool exists = _service.CheckIfGameExists(id);
 
             return exists;
-        }*/
+        }
     }
 }

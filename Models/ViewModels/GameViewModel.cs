@@ -13,7 +13,6 @@ namespace Model.ViewModels
     public class GameViewModel : BaseModel, IModificationTimestamp
     {
         public GameViewModel()
-            : base()
         {
             this.ModifiedAtUtc = this.CreatedAtUtc;
         }
@@ -35,7 +34,7 @@ namespace Model.ViewModels
 
         [Range(3, 18)]
         [Display(Name = "PEGI rating")]
-        public sbyte AgeRating { get; set; }
+        public byte AgeRating { get; set; }
 
         public string Description { get; set; }
 
