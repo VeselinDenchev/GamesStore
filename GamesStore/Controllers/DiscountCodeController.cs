@@ -99,9 +99,9 @@ namespace GamesStore.Controllers
         // POST: Game/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(DiscountCodeViewModel discountCode)
+        public IActionResult DeleteConfirmed(string id)
         {
-            discountCodeService.DeleteDiscountCode(discountCode);
+            discountCodeService.DeleteDiscountCode(id);
 
             return RedirectToAction(nameof(Index));
         }

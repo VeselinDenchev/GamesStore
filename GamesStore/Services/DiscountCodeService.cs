@@ -85,9 +85,10 @@
             }
         }
 
-        public void DeleteDiscountCode(DiscountCodeViewModel code)
+        public void DeleteDiscountCode(string id)
         {
-            DiscountCode codeToBeDeleted = PassDataFromViewModelToModel(code);
+            DiscountCode codeToBeDeleted = new DiscountCode();
+            codeToBeDeleted.Id = id;
 
             dbContext.DiscountCodes.Remove(codeToBeDeleted);
             dbContext.SaveChanges();
