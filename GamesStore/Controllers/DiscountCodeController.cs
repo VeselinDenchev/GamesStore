@@ -12,34 +12,34 @@ using Model.ViewModels;
 
 namespace GamesStore.Controllers
 {
-    public class GameController : Controller
+    public class DiscountCodeController : Controller
     {
-        private readonly GameService gameService;
+        private readonly DiscountCodeService discountCodeService;
 
-        public GameController(GameService service)
+        public DiscountCodeController(DiscountCodeService service)
         {
-            gameService = service;
+            discountCodeService = service;
         }
 
         // GET: Game
         public IActionResult Index()
         {
-            List<GameViewModel> games = gameService.LoadAllGames();
+            List<DiscountCodeViewModel> discountCodes = discountCodeService.LoadAllDiscountCodes();
 
-            return View(games);
+            return View(discountCodes);
         }
-        
+
         // GET: Game/Details
         public IActionResult Details(string id)
         {
-            GameViewModel game = gameService.CheckIfGameIdIsValid(id);
+            DiscountCodeViewModel discountCode = discountCodeService.CheckIfDiscountCodeIdIsValid(id);
 
-            if (game is null)
+            if (discountCode is null)
             {
                 return NotFound();
             }
 
-            return View(game);
+            return View(discountCode);
         }
 
         // GET: Game/Create
@@ -51,64 +51,64 @@ namespace GamesStore.Controllers
         // POST: Game/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(GameViewModel game)
+        public IActionResult Create(DiscountCodeViewModel discountCode)
         {
             if (ModelState.IsValid)
             {
-                gameService.CreateGame(game);
+                discountCodeService.CreateDiscountCode(discountCode);
 
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(game);
+            return View(discountCode);
         }
-        
+
         // GET: Game/Edit
         public IActionResult Edit(string id)
         {
-            GameViewModel game = gameService.CheckIfGameIdIsValid(id);
+            DiscountCodeViewModel discountCode = discountCodeService.CheckIfDiscountCodeIdIsValid(id);
 
-            return View(game);
+            return View(discountCode);
         }
-        
+
         // POST: Game/Edit
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(GameViewModel game)
+        public IActionResult Edit(DiscountCodeViewModel discountCode)
         {
-            if (game is null)
+            if (discountCode is null)
             {
                 return NotFound();
             }
 
-            gameService.SaveEditedGame(game);
+            discountCodeService.SaveEditedDiscountCode(discountCode);
 
             return RedirectToAction(nameof(Index));
         }
-        
+
         // GET: Game/Delete
         public IActionResult Delete(string id)
         {
-            GameViewModel game = gameService.CheckIfGameIdIsValid(id);
+            DiscountCodeViewModel discountCode = discountCodeService.CheckIfDiscountCodeIdIsValid(id);
 
-            return View(game);
+            return View(discountCode);
         }
-        
+
         // POST: Game/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(GameViewModel game)
+        public IActionResult DeleteConfirmed(DiscountCodeViewModel discountCode)
         {
-            gameService.DeleteGame(game);
+            discountCodeService.DeleteDiscountCode(discountCode);
 
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GameExists(string id)
+        private bool DiscountCodeExists(string id)
         {
-            bool exists = gameService.CheckIfGameExists(id);
+            bool exists = discountCodeService.CheckIfDiscountCodeExists(id);
 
             return exists;
         }

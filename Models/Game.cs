@@ -34,7 +34,7 @@
 
         [Range(3, 18)]
         [Display(Name = "PEGI rating")]
-        public byte AgeRating { get; set; }
+        public sbyte AgeRating { get; set; }
 
         public string Description { get; set; }
 

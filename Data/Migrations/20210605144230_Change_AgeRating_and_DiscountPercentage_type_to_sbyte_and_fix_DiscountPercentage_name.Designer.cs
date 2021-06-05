@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(GamesStoreDbContext))]
-    partial class GamesStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210605144230_Change_AgeRating_and_DiscountPercentage_type_to_sbyte_and_fix_DiscountPercentage_name")]
+    partial class Change_AgeRating_and_DiscountPercentage_type_to_sbyte_and_fix_DiscountPercentage_name
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
