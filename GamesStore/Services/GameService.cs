@@ -12,38 +12,22 @@ namespace GamesStore.Services
 {
     public class GameService
     {
-        private readonly GamesStoreDbContext _dbContext;
+        private readonly GamesStoreDbContext dbContext;
 
-        public GameService(GamesStoreDbContext dbContext)
+        public GameService(GamesStoreDbContext context)
         {
-            _dbContext = dbContext;
+            dbContext = context;
         }
 
         public List<GameViewModel> LoadAllGames()
         {
             List<GameViewModel> games = new List<GameViewModel>();
 
-            foreach (Game game in _dbContext.Games)
+            foreach (Game game in dbContext.Games)
             {
                 GameViewModel gameViewModel = PassDataFromModelToViewModel(game);
                 games.Add(gameViewModel);
             }
-
-            /*List<GameViewModel> games = _dbContext.Games.Select(gameInDb => new GameViewModel()
-            {
-                Id = gameInDb.Id,
-                Name = gameInDb.Name,
-                Platform = gameInDb.Platform,
-                ImgUrl = gameInDb.ImgUrl,
-                Developer = gameInDb.Developer,
-                AgeRating = gameInDb.AgeRating,
-                Description = gameInDb.Description,
-                YearOfRelease = gameInDb.YearOfRelease,
-                Price = gameInDb.Price,
-                Quantity = gameInDb.Quantity,
-                CreatedAtUtc = gameInDb.CreatedAtUtc,
-                ModifiedAtUtc = gameInDb.ModifiedAtUtc
-            }).ToList();*/
 
             return games;
         }
@@ -52,13 +36,13 @@ namespace GamesStore.Services
         {
             Game newGame = PassDataFromViewModelToModel(game);
 
-            _dbContext.Games.Add(newGame);
-            _dbContext.SaveChanges();
+            dbContext.Games.Add(newGame);
+            dbContext.SaveChanges();
         }
 
         public GameViewModel FindGameById(string id)
         {
-            Game game = _dbContext.Games.FirstOrDefault(m => m.Id == id);
+            Game game = dbContext.Games.FirstOrDefault(m => m.Id == id);
 
             GameViewModel gameViewModel = PassDataFromModelToViewModel(game);
 
@@ -80,7 +64,7 @@ namespace GamesStore.Services
 
         public void SaveEditedGame(GameViewModel gameViewModel)
         {
-            Game game = _dbContext.Games.FirstOrDefault(m => m.Id == gameViewModel.Id);
+            Game game = dbContext.Games.FirstOrDefault(m => m.Id == gameViewModel.Id);
 
             bool hasDifferentName = game.Name != gameViewModel.Name;
             bool hasDifferentPlatform = game.Platform != gameViewModel.Platform;
@@ -135,7 +119,7 @@ namespace GamesStore.Services
             if (hasBeenModified)
             {
                 game.ModifiedAtUtc = DateTime.UtcNow;
-                _dbContext.SaveChanges();
+                dbContext.SaveChanges();
             }
         }
 
@@ -143,13 +127,13 @@ namespace GamesStore.Services
         {
             Game gameToBeDeleted = PassDataFromViewModelToModel(game);
 
-            _dbContext.Games.Remove(gameToBeDeleted);
-            _dbContext.SaveChanges();
+            dbContext.Games.Remove(gameToBeDeleted);
+            dbContext.SaveChanges();
         }
 
         public bool CheckIfGameExists(string id)
         {
-            bool exists = _dbContext.Games.Any(m => m.Id == id);
+            bool exists = dbContext.Games.Any(m => m.Id == id);
 
             return exists;
         }
