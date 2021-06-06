@@ -16,15 +16,15 @@ namespace GamesStore.Controllers
     {
         private readonly GameService gameService;
 
-        public GameController(GameService service)
+        public GameController(GameService gameService)
         {
-            gameService = service;
+            this.gameService = gameService;
         }
 
         // GET: Game
         public IActionResult Index()
         {
-            List<GameViewModel> games = gameService.LoadAllGames();
+            List<GameViewModel> games = this.gameService.LoadAllGames();
 
             return View(games);
         }
@@ -32,7 +32,7 @@ namespace GamesStore.Controllers
         // GET: Game/Details
         public IActionResult Details(string id)
         {
-            GameViewModel game = gameService.CheckIfGameIdIsValid(id);
+            GameViewModel game = this.gameService.CheckIfGameIdIsValid(id);
 
             if (game is null)
             {
@@ -55,7 +55,7 @@ namespace GamesStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                gameService.CreateGame(game);
+                this.gameService.CreateGame(game);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -66,7 +66,7 @@ namespace GamesStore.Controllers
         // GET: Game/Edit
         public IActionResult Edit(string id)
         {
-            GameViewModel game = gameService.CheckIfGameIdIsValid(id);
+            GameViewModel game = this.gameService.CheckIfGameIdIsValid(id);
 
             return View(game);
         }
@@ -83,7 +83,7 @@ namespace GamesStore.Controllers
                 return NotFound();
             }
 
-            gameService.SaveEditedGame(game);
+            this.gameService.SaveEditedGame(game);
 
             return RedirectToAction(nameof(Index));
         }
@@ -91,7 +91,7 @@ namespace GamesStore.Controllers
         // GET: Game/Delete
         public IActionResult Delete(string id)
         {
-            GameViewModel game = gameService.CheckIfGameIdIsValid(id);
+            GameViewModel game = this.gameService.CheckIfGameIdIsValid(id);
 
             return View(game);
         }
@@ -101,14 +101,14 @@ namespace GamesStore.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(GameViewModel game)
         {
-            gameService.DeleteGame(game);
+            this.gameService.DeleteGame(game);
 
             return RedirectToAction(nameof(Index));
         }
 
         private bool GameExists(string id)
         {
-            bool exists = gameService.CheckIfGameExists(id);
+            bool exists = this.gameService.CheckIfGameExists(id);
 
             return exists;
         }

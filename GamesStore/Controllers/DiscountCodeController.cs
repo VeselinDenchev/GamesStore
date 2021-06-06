@@ -16,15 +16,15 @@ namespace GamesStore.Controllers
     {
         private readonly DiscountCodeService discountCodeService;
 
-        public DiscountCodeController(DiscountCodeService service)
+        public DiscountCodeController(DiscountCodeService discountCodeService)
         {
-            discountCodeService = service;
+            this.discountCodeService = discountCodeService;
         }
 
         // GET: Game
         public IActionResult Index()
         {
-            List<DiscountCodeViewModel> discountCodes = discountCodeService.LoadAllDiscountCodes();
+            List<DiscountCodeViewModel> discountCodes = this.discountCodeService.LoadAllDiscountCodes();
 
             return View(discountCodes);
         }
@@ -32,7 +32,7 @@ namespace GamesStore.Controllers
         // GET: Game/Details
         public IActionResult Details(string id)
         {
-            DiscountCodeViewModel discountCode = discountCodeService.CheckIfDiscountCodeIdIsValid(id);
+            DiscountCodeViewModel discountCode = this.discountCodeService.CheckIfDiscountCodeIdIsValid(id);
 
             if (discountCode is null)
             {
@@ -55,7 +55,7 @@ namespace GamesStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                discountCodeService.CreateDiscountCode(discountCode);
+                this.discountCodeService.CreateDiscountCode(discountCode);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -66,7 +66,7 @@ namespace GamesStore.Controllers
         // GET: Game/Edit
         public IActionResult Edit(string id)
         {
-            DiscountCodeViewModel discountCode = discountCodeService.CheckIfDiscountCodeIdIsValid(id);
+            DiscountCodeViewModel discountCode = this.discountCodeService.CheckIfDiscountCodeIdIsValid(id);
 
             return View(discountCode);
         }
@@ -83,7 +83,7 @@ namespace GamesStore.Controllers
                 return NotFound();
             }
 
-            discountCodeService.SaveEditedDiscountCode(discountCode);
+            this.discountCodeService.SaveEditedDiscountCode(discountCode);
 
             return RedirectToAction(nameof(Index));
         }
@@ -91,7 +91,7 @@ namespace GamesStore.Controllers
         // GET: Game/Delete
         public IActionResult Delete(string id)
         {
-            DiscountCodeViewModel discountCode = discountCodeService.CheckIfDiscountCodeIdIsValid(id);
+            DiscountCodeViewModel discountCode = this.discountCodeService.CheckIfDiscountCodeIdIsValid(id);
 
             return View(discountCode);
         }
@@ -101,14 +101,14 @@ namespace GamesStore.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(string id)
         {
-            discountCodeService.DeleteDiscountCode(id);
+            this.discountCodeService.DeleteDiscountCode(id);
 
             return RedirectToAction(nameof(Index));
         }
 
         private bool DiscountCodeExists(string id)
         {
-            bool exists = discountCodeService.CheckIfDiscountCodeExists(id);
+            bool exists = this.discountCodeService.CheckIfDiscountCodeExists(id);
 
             return exists;
         }

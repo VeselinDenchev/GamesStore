@@ -47,6 +47,7 @@ namespace GamesStore
             services.AddRazorPages();
 
             services.AddDefaultIdentity<User>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<GamesStoreDbContext>();
 
             services.Configure<IdentityOptions>(options =>
