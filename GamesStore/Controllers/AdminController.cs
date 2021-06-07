@@ -5,6 +5,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Constants;
+
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +15,7 @@
     using Model.ViewModels;
     using Model.ViewModels.Role;
 
+    [Authorize(Roles = Role.ADMIN_ROLE)]
     public class AdminController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;

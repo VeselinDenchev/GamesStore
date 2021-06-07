@@ -9,6 +9,8 @@ using Data;
 using Model;
 using GamesStore.Services;
 using Model.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Constants;
 
 namespace GamesStore.Controllers
 {
@@ -42,6 +44,7 @@ namespace GamesStore.Controllers
             return View(game);
         }
 
+        [Authorize(Roles = Role.ADMIN_ROLE)]
         // GET: Game/Create
         public IActionResult Create()
         {
@@ -62,7 +65,8 @@ namespace GamesStore.Controllers
 
             return View(game);
         }
-        
+
+        [Authorize(Roles = Role.ADMIN_ROLE)]
         // GET: Game/Edit
         public IActionResult Edit(string id)
         {
@@ -87,7 +91,8 @@ namespace GamesStore.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        
+
+        [Authorize(Roles = Role.ADMIN_ROLE)]
         // GET: Game/Delete
         public IActionResult Delete(string id)
         {
