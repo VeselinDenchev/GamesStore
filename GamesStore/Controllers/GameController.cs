@@ -11,6 +11,8 @@ using GamesStore.Services;
 using Model.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Constants;
+using System.Web;
+using Microsoft.AspNetCore.Http;
 
 namespace GamesStore.Controllers
 {
@@ -18,9 +20,15 @@ namespace GamesStore.Controllers
     {
         private readonly GameService gameService;
 
+        private List<ShoppingCartViewModel> shoppingCartViewModels;
+
+        private ISession session;
+
+
         public GameController(GameService gameService)
         {
             this.gameService = gameService;
+            this.shoppingCartViewModels = new List<ShoppingCartViewModel>();
         }
 
         // GET: Game

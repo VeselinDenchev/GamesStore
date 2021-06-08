@@ -5,6 +5,32 @@
     ViewData["Title"] = "Index";
 }
 
+<script>
+    function AddToCart(item) {
+        var itemId = $(item).attr("itemid");
+        var formData = new FormData();
+        formData.Append("ItemId", itemId);
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: formData,
+            url: "/Game/Index",
+            success: function (data) {
+                if (data.Success) {
+                    $("#cartItem").text("Cart(" + data.Counter + ")");
+                }
+            },
+            
+            error: function () {
+                alert("There is a problem.");
+            }
+        })
+    } 
+</script>
+
 <h1>Index</h1>
 
 
@@ -104,12 +130,13 @@ else
     {
         <div class="card">
             <div class="card-body">
-                <img src="@game.ImgUrl" width="375" height="300" />
+                <img src="@game.ImgUrl" width="350" height="375" />
             </div>
             <div class="card-footer">
                 <span>@game.Name</span>
                 <spam>@game.Price</spam>
-                <button class="btn btn-primary">Add to cart</button>
+                <!-- <button name="AddToCart" class="btn btn-primary" itemid="@game.Id" id="AddToCartButton" onclick="AddToCart(this)">Add to cart</button> -->
+                <a class="btn btn-primary" asp-controller="Cart" asp-action="Buy" asp-route-id="@game.Id">Add to cart</a>
             </div>
         </div>
     }

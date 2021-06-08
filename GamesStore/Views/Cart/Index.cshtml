@@ -1,0 +1,35 @@
+﻿<h3>Cart</h3>
+
+<form method="POST" asp-controller="Cart" asp-action="UpdateGameQuantity">
+    <table>
+        <tr>
+            <th>Action</th>
+            <th>Name</th>
+            <th>Platform</th>
+            <th>ImgUrl</th>
+            <th>Price</th>
+            <th>Quantity <input type="submit" value="Update"</th>
+            <th>Total</th>
+        </tr>
+        @foreach (CartItemViewModel cartItem in ViewBag.cart)
+        {
+            <tr>
+                <a asp-controller="cart" asp-action="Remove" asp-route-id="@cartItem.GameInCart.Id">Remove</a>
+                <td>@cartItem.GameInCart.Name</td>
+                <td>@cartItem.GameInCart.Platform</td>
+                <td><img src="@cartItem.GameInCart.ImgUrl" width="60" height="75"></td>
+                <td>@cartItem.GameInCart.Price</td>
+                <td>@cartItem.QuantityOfGame</td>
+                <td><input type="number" min="1" , name="quantity" value="@cartItem.QuantityOfGame" /></td>
+                <td>@cartItem.TotalGamePrice</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="6" align="right">Total</td>
+            <td>@ViewBag.total</td>
+        </tr>
+    </table>
+</form>
+
+<a asp-controller="Game" asp-action="Index">Continue shopping</a>
+<a asp-controller="Cart" asp-action="Checkout">Checkout</a>

@@ -44,6 +44,13 @@ namespace GamesStore
             //    .AddEntityFrameworkStores<GamesStoreDbContext>();
             //services.AddControllersWithViews();
 
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                
+            });
+
             services.AddRazorPages();
 
             services.AddDefaultIdentity<User>()
@@ -90,6 +97,8 @@ namespace GamesStore
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
