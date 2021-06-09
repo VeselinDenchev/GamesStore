@@ -8,7 +8,7 @@
             <th>Platform</th>
             <th>ImgUrl</th>
             <th>Price</th>
-            <th>Quantity <input type="submit" value="Update"</th>
+            <th>Quantity <input type="submit" value="Update" /></th>
             <th>Total</th>
         </tr>
         @foreach (CartItemViewModel cartItem in ViewBag.cart)
@@ -20,7 +20,7 @@
                 <td><img src="@cartItem.GameInCart.ImgUrl" width="60" height="75"></td>
                 <td>@cartItem.GameInCart.Price</td>
                 <td>@cartItem.QuantityOfGame</td>
-                <td><input type="number" min="1" , name="quantity" value="@cartItem.QuantityOfGame" /></td>
+                <td><input type="number" min="1" name="quantity" value="@cartItem.QuantityOfGame" /></td>
                 <td>@cartItem.TotalGamePrice</td>
             </tr>
         }
@@ -32,4 +32,4 @@
 </form>
 
 <a asp-controller="Game" asp-action="Index">Continue shopping</a>
-<a asp-controller="Cart" asp-action="Checkout">Checkout</a>
+<a asp-controller="Order" asp-action="Index">Checkout</a>

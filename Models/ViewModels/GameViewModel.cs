@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Model.Interfaces;
-
-namespace Model.ViewModels
+﻿namespace Model.ViewModels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    using Model.Interfaces;
+
     public class GameViewModel : BaseModel, IModificationTimestamp
     {
         public GameViewModel()

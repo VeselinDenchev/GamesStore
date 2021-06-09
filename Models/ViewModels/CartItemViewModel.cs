@@ -9,8 +9,6 @@
 
     public class CartItemViewModel : BaseModel
     {
-        public User User { get; set; }
-
         public string GameId { get; set; }
 
         public GameViewModel GameInCart { get; set; }

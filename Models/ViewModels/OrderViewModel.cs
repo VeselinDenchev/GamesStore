@@ -1,4 +1,4 @@
-﻿namespace Model
+﻿namespace Model.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -8,19 +8,19 @@
 
     using Constants;
 
-    public class Order : BaseModel
+    public class OrderViewModel : BaseModel
     {
         private decimal totalPrice = 0;
 
         public User User { get; set; }
 
-        public List<CartItem> Cart { get; set; }
+        public List<CartItemViewModel> Cart { get; set; }
 
         [Display(Name = "Discount code")]
         public DiscountCode DiscountCode { get; set; }
 
         [Display(Name = "Total")]
-        public decimal TotalPrice 
+        public decimal TotalPrice
         {
             get
             {
@@ -50,5 +50,6 @@
 
         [Display(Name = "Delivery date")]
         public DateTime DeliveryDate { get; set; }
-    }
 }
+}
+

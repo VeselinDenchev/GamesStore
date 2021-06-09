@@ -21,6 +21,7 @@
         private const string INDEX_ACTION = "Index";
         private const string GAME_CONTROLLER = "Game";
 
+        private const int MIN_BUYABLE_QUANTITY_OF_GAME = 1;
         private const int NOT_FOUND_INDEX = -1;
 
         private readonly GameService gameService;
@@ -32,7 +33,9 @@
 
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString(SESSION_KEY) != null)
+            bool sessionKeyIsNotNull = HttpContext.Session.GetString(SESSION_KEY) != null;
+
+            if (sessionKeyIsNotNull)
             {
                 List<CartItemViewModel> cart = DeserializeObject();
                 ViewBag.cart = cart;
@@ -47,18 +50,20 @@
         {
             GameViewModel game = gameService.FindGameById(id);
 
-            if (HttpContext.Session.GetString(SESSION_KEY) == null)
+            bool sessionKeyIsNull = HttpContext.Session.GetString(SESSION_KEY) == null;
+
+            if (sessionKeyIsNull)
             {
                 List<CartItemViewModel> cart = new List<CartItemViewModel>
                 {
                     new CartItemViewModel
                     {
                         GameInCart = game,
-                        QuantityOfGame = 1
+                        QuantityOfGame = MIN_BUYABLE_QUANTITY_OF_GAME
                     }
                 };
 
-                HttpContext.Session.SetString(SESSION_KEY, JsonConvert.SerializeObject(cart));
+                SerializeObject(cart);
             }
             else
             {
@@ -71,7 +76,7 @@
                     cart.Add(new CartItemViewModel
                     {
                         GameInCart = game,
-                        QuantityOfGame = 1
+                        QuantityOfGame = MIN_BUYABLE_QUANTITY_OF_GAME
                     });
                 }
                 else
@@ -110,12 +115,12 @@
             return RedirectToAction(INDEX_ACTION);
         }
 
-        public IActionResult Checkout()
+        /*public IActionResult Checkout()
         {
             HttpContext.Session.Remove(SESSION_KEY);
 
-            return RedirectToAction(INDEX_ACTION, GAME_CONTROLLER);
-        }
+            return RedirectToAction(INDEX_ACTION, "Order");
+        }*/
 
         private void SerializeObject(List<CartItemViewModel> cart)
         {
@@ -124,7 +129,7 @@
 
         private List<CartItemViewModel> DeserializeObject()
         {
-            List<CartItemViewModel> cart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(HttpContext.Session.GetString("cart"));
+            List<CartItemViewModel> cart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(HttpContext.Session.GetString(SESSION_KEY));
 
             return cart;
         }

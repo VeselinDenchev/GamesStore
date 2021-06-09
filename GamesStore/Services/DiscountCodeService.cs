@@ -21,15 +21,15 @@
 
         public List<DiscountCodeViewModel> LoadAllDiscountCodes()
         {
-            List<DiscountCodeViewModel> games = new List<DiscountCodeViewModel>();
+            List<DiscountCodeViewModel> discountCodes = new List<DiscountCodeViewModel>();
 
             foreach (DiscountCode code in dbContext.DiscountCodes)
             {
                 DiscountCodeViewModel codeViewModel = PassDataFromModelToViewModel(code);
-                games.Add(codeViewModel);
+                discountCodes.Add(codeViewModel);
             }
 
-            return games;
+            return discountCodes;
         }
 
         public void CreateDiscountCode(DiscountCodeViewModel discountCode)

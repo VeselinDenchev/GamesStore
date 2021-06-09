@@ -20,15 +20,9 @@ namespace GamesStore.Controllers
     {
         private readonly GameService gameService;
 
-        private List<ShoppingCartViewModel> shoppingCartViewModels;
-
-        private ISession session;
-
-
         public GameController(GameService gameService)
         {
             this.gameService = gameService;
-            this.shoppingCartViewModels = new List<ShoppingCartViewModel>();
         }
 
         // GET: Game

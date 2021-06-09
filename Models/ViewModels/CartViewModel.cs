@@ -8,7 +8,7 @@
 
     using Microsoft.AspNetCore.Mvc.RazorPages;
 
-    public class ShoppingCartViewModel
+    public class CartViewModel
     {
         public string ItemId { get; set; }
 
