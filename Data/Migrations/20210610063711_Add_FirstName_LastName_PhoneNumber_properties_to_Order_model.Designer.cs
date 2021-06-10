@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(GamesStoreDbContext))]
-    partial class GamesStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210610063711_Add_FirstName_LastName_PhoneNumber_properties_to_Order_model")]
+    partial class Add_FirstName_LastName_PhoneNumber_properties_to_Order_model
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

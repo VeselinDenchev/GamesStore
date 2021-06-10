@@ -20,33 +20,23 @@
         public DiscountCode DiscountCode { get; set; }
 
         [Display(Name = "Total")]
-        public decimal TotalPrice 
-        {
-            get
-            {
-                return this.totalPrice;
-            }
-            set
-            {
-                decimal totalGamesPrice = 0;
+        public decimal TotalPrice { get; set; }
 
-                /*foreach (CartItem item in Cart)
-                {
-                    totalGamesPrice += item.TotalGamePrice;
-                }*/
+        [Required]
+        [Display(Name = "First name")]
+        public string FirstName { get; set; }
 
-                if (Cart.Count > 0)
-                {
-                    totalGamesPrice += Constant.DELIVERY_TAX;
-                }
-
-                this.totalPrice = totalGamesPrice;
-            }
-        }
+        [Required]
+        [Display(Name = "Last name")]
+        public string LastName { get; set; }
 
         [Required]
         [Display(Name = "Delivery address")]
         public string DeliveryAddress { get; set; }
+
+        [MinLength(10)]
+        [Display(Name = "Phone number")]
+        public string PhoneNumber { get; set; }
 
         [Display(Name = "Delivery date")]
         public DateTime DeliveryDate { get; set; }

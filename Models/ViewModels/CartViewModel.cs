@@ -10,9 +10,9 @@
 
     public class CartViewModel
     {
-        public string ItemId { get; set; }
+        public string GameId { get; set; }
 
-        public string ItemName { get; set; }
+        public string GameName { get; set; }
 
         public string ImgUrl { get; set; }
 

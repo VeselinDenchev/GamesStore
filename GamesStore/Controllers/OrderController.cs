@@ -31,28 +31,33 @@
         private string userId;
         private readonly DiscountCodeService discountCodeService;
         private List<DiscountCodeViewModel> discountCodes;
+        private readonly OrderService orderService;
 
-        public OrderController(UserManager<User> userManager, DiscountCodeService discountCodeService)
+        public OrderController(UserManager<User> userManager, DiscountCodeService discountCodeService, OrderService orderService)
         {
             this.userManager = userManager;
             this.discountCodeService = discountCodeService;
+            this.orderService = orderService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            userId = this.userManager.GetUserId(HttpContext.User);
-
-            User user = await this.userManager.FindByIdAsync(this.userId);
-            ViewBag.user = user;
-
             //ViewBag.userId = this.userManager.GetUserId(HttpContext.User);
 
             bool sessionKeyCartIsNotNull = HttpContext.Session.GetString(SESSION_KEY_CART) != null;
 
             if (sessionKeyCartIsNotNull)
             {
-                List<CartItemViewModel> cart = DeserializeObject();
-                ViewBag.cart = cart;
+                List<CartItemViewModel> cartItemViewModels = DeserializeCart();
+                ViewBag.cart = cartItemViewModels;
+
+                List<CartItem> cart = new List<CartItem>();
+
+                foreach (CartItemViewModel cartItemViewModel in cartItemViewModels)
+                {
+                    CartItem cartItem = this.orderService.PassDataFromViewModelToModelCartItem(cartItemViewModel);
+                    cart.Add(cartItem);
+                }
 
                 bool sessionKeyTotalIsNotNull = HttpContext.Session.GetString(SESSION_KEY_TOTAL) != null;
                 string totalPriceString = null;
@@ -64,16 +69,39 @@
                 }
                 else
                 {
-                    decimal totalPrice = cart.Sum(cartItem => cartItem.GameInCart.Price * cartItem.QuantityOfGame);
+                    decimal totalPrice = cartItemViewModels.Sum(cartItem => cartItem.GameInCart.Price * cartItem.QuantityOfGame);
                     totalPriceString = totalPrice.ToString();
                     ViewBag.total = totalPrice;
 
                     SerializeTotalPrice(totalPriceString);
                 }
-                
+
+                bool sessionKeyDiscountCodeIsNotNull = HttpContext.Session.GetString("discountCode") != null;
+                if (sessionKeyDiscountCodeIsNotNull)
+                {
+                    /*DiscountCodeViewModel discountCodeViewModel = DeserializeDiscountCode();
+                    DiscountCode discountCode = discountCodeService.PassDataFromViewModelToModel(discountCodeViewModel);*/
+
+                    
+
+                    //return View("ConfirmOrderDetails");
+                }
+
+                bool sessionKeyOrderIsNull = HttpContext.Session.GetString("order") == null;
+                if (sessionKeyOrderIsNull)
+                {
+                    OrderViewModel order = new OrderViewModel()
+                    {
+                        //User = user,
+                        Cart = cart,
+                        TotalPrice = ViewBag.total,
+                    };
+
+                    SerializeOrder(order);
+                }
             }
 
-            return View(user);
+            return View();
         }
 
         [HttpPost]
@@ -84,7 +112,7 @@
                 return RedirectToAction(INDEX_ACTION);
             }
 
-            List<CartItemViewModel> cart = DeserializeObject();
+            List<CartItemViewModel> cart = DeserializeCart();
             string totalPriceString = DeserializeTotalPrice();
             decimal totalPrice = Decimal.Parse(totalPriceString);
 
@@ -97,22 +125,71 @@
                 if (isValid)
                 {
                     totalPrice *= (100 - discountCode.DiscountPercentage) / 100m;
+                    
                     totalPriceString = totalPrice.ToString();
+                    SerializeDiscountCode(discountCode);
+
+                    DiscountCode discountCodeModel = discountCodeService.PassDataFromViewModelToModel(discountCode);
+                    OrderViewModel order = DeserializeOrder();
+                    order.TotalPrice *= (100 - discountCode.DiscountPercentage) / 100m;
+                    order.TotalPrice += Constant.DELIVERY_TAX;
+                    ViewBag.total = order.TotalPrice ;
+                    order.DiscountCode = discountCodeModel;
+                    SerializeOrder(order);
                 }
             }
 
-            SerializeObject(cart);
+            SerializeCart(cart);
             SerializeTotalPrice(totalPriceString);
-
+            
             return RedirectToAction(INDEX_ACTION);
         }
 
-        private void SerializeObject(List<CartItemViewModel> cart)
+        public async Task<IActionResult> ConfirmOrderDetails()
+        {
+            OrderViewModel order = DeserializeOrder();
+
+            this.userId = this.userManager.GetUserId(HttpContext.User);
+
+            User user = await this.userManager.FindByIdAsync(this.userId);
+            ViewBag.user = user;
+
+            order.User = user;
+
+            SerializeOrder(order);
+
+            return View(order);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ConfirmOrderDetails(string firstName, string lastName, string deliveryAddress, string phoneNumber)
+        {
+            OrderViewModel orderViewModel = DeserializeOrder();
+            orderViewModel.FirstName = firstName;
+            orderViewModel.LastName = lastName;
+            orderViewModel.DeliveryAddress = deliveryAddress;
+            orderViewModel.PhoneNumber = phoneNumber;
+
+            if (ModelState.IsValid)
+            {
+                this.orderService.CreateOrder(orderViewModel);
+            }
+
+            return View("OrderDetails", orderViewModel);
+        }
+
+        public IActionResult OrderDetails()
+        {
+            return View();
+        }
+
+        private void SerializeCart(List<CartItemViewModel> cart)
         {
             HttpContext.Session.SetString(SESSION_KEY_CART, JsonConvert.SerializeObject(cart));
         }
 
-        private List<CartItemViewModel> DeserializeObject()
+        private List<CartItemViewModel> DeserializeCart()
         {
             List<CartItemViewModel> cart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(HttpContext.Session.GetString(SESSION_KEY_CART));
 
@@ -129,6 +206,30 @@
             string totalPriceString = JsonConvert.DeserializeObject<string>(HttpContext.Session.GetString(SESSION_KEY_TOTAL));
 
             return totalPriceString;
+        }
+
+        private void SerializeDiscountCode(DiscountCodeViewModel discountCode)
+        {
+            HttpContext.Session.SetString("discountCode", JsonConvert.SerializeObject(discountCode));
+        }
+
+        private DiscountCodeViewModel DeserializeDiscountCode()
+        {
+            DiscountCodeViewModel discountCode = JsonConvert.DeserializeObject<DiscountCodeViewModel>(HttpContext.Session.GetString("discountCode"));
+
+            return discountCode;
+        }
+
+        private void SerializeOrder(OrderViewModel order)
+        {
+            HttpContext.Session.SetString("order", JsonConvert.SerializeObject(order));
+        }
+
+        private OrderViewModel DeserializeOrder()
+        {
+            OrderViewModel order = JsonConvert.DeserializeObject<OrderViewModel>(HttpContext.Session.GetString("order"));
+
+            return order;
         }
     }
 }

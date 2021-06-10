@@ -9,9 +9,9 @@
 
     public class CartItemViewModel : BaseModel
     {
-        public string GameId { get; set; }
-
         public GameViewModel GameInCart { get; set; }
+
+        public string GameId => GameInCart.Id;
 
         [Range(0, 30)]
         [Display(Name = "Quantity")]

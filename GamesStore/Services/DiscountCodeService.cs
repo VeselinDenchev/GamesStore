@@ -14,9 +14,9 @@
     {
         private readonly GamesStoreDbContext dbContext;
 
-        public DiscountCodeService(GamesStoreDbContext context)
+        public DiscountCodeService(GamesStoreDbContext dbContext)
         {
-            dbContext = context;
+            this.dbContext = dbContext;
         }
 
         public List<DiscountCodeViewModel> LoadAllDiscountCodes()
@@ -36,8 +36,8 @@
         {
             DiscountCode newDiscountCode = PassDataFromViewModelToModel(discountCode);
 
-            dbContext.DiscountCodes.Add(newDiscountCode);
-            dbContext.SaveChanges();
+            this.dbContext.DiscountCodes.Add(newDiscountCode);
+            this.dbContext.SaveChanges();
         }
 
         public DiscountCodeViewModel FindDiscountCodeById(string id)
@@ -64,7 +64,7 @@
 
         public void SaveEditedDiscountCode(DiscountCodeViewModel codeViewModel)
         {
-            DiscountCode code = dbContext.DiscountCodes.FirstOrDefault(m => m.Id == codeViewModel.Id);
+            DiscountCode code = this.dbContext.DiscountCodes.FirstOrDefault(m => m.Id == codeViewModel.Id);
 
             bool hasDifferentCode = code.Code != codeViewModel.Code;
             bool hasDifferentDiscount = code.DiscountPercentage != codeViewModel.DiscountPercentage;
@@ -81,7 +81,7 @@
             if (hasBeenModified)
             {
                 code.ModifiedAtUtc = DateTime.UtcNow;
-                dbContext.SaveChanges();
+                this.dbContext.SaveChanges();
             }
         }
 
@@ -90,13 +90,13 @@
             DiscountCode codeToBeDeleted = new DiscountCode();
             codeToBeDeleted.Id = id;
 
-            dbContext.DiscountCodes.Remove(codeToBeDeleted);
-            dbContext.SaveChanges();
+            this.dbContext.DiscountCodes.Remove(codeToBeDeleted);
+            this.dbContext.SaveChanges();
         }
 
         public bool CheckIfDiscountCodeExists(string id)
         {
-            bool exists = dbContext.DiscountCodes.Any(m => m.Id == id);
+            bool exists = this.dbContext.DiscountCodes.Any(m => m.Id == id);
 
             return exists;
         }
@@ -115,7 +115,7 @@
             return viewModel;
         }
 
-        private DiscountCode PassDataFromViewModelToModel(DiscountCodeViewModel viewModel)
+        public DiscountCode PassDataFromViewModelToModel(DiscountCodeViewModel viewModel)
         {
             DiscountCode model = new DiscountCode()
             {

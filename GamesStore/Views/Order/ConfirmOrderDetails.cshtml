@@ -1,0 +1,83 @@
+﻿@model OrderViewModel
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="POST" name="order" asp-controller="Order" asp-action="ConfirmOrderDetails" asp-route-firstName="@Model.User.FirstName"
+              asp-route-lastName="@Model.User.LastName" asp-route-deliveryAddress="@Model.User.DeliveryAddress" asp-route-phoneNumber="@Model.User.PhoneNumber">
+            @{
+                decimal sumOfGamePricesNumber = 0;
+
+                foreach (CartItem cartItem in Model.Cart)
+                {
+                    sumOfGamePricesNumber += cartItem.TotalGamePrice;
+                }
+
+                bool areEqualNumbers = sumOfGamePricesNumber == ViewBag.total;
+                if (!areEqualNumbers)
+                {
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" class="form-control" value="@Model.User.FirstName" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" value="@Model.User.LastName" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DeliveryAddress" class="control-label"></label>
+                        <input asp-for="DeliveryAddress" class="form-control" value="@Model.User.DeliveryAddress" />
+                        <span asp-validation-for="DeliveryAddress" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber" class="control-label"></label>
+                        <input asp-for="PhoneNumber" class="form-control" value="@Model.User.PhoneNumber" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <span>Will be delivered on @DateTime.Now.AddDays(3).ToShortDateString()</span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" name="order" value="Create order" class="btn btn-primary" />
+                    </div>
+                }
+                else
+                {
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" class="form-control" value="@ViewBag.user.FirstName" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" value="@ViewBag.user.LastName" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DeliveryAddress" class="control-label">Delivery address</label>
+                        <input asp-for="DeliveryAddress" class="form-control" value="@ViewBag.user.DeliveryAddress" />
+                        <span asp-validation-for="DeliveryAddress" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber" class="control-label">Phone number</label>
+                        <input asp-for="PhoneNumber" class="form-control" value="@ViewBag.user.PhoneNumber" />
+                        <span asp-validation-for="DeliveryAddress" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <span>Will be delivered on @DateTime.Now.AddDays(3).ToShortDateString()</span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" name="order" value="Create order" class="btn btn-primary" />
+                    </div>
+                }
+            }
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

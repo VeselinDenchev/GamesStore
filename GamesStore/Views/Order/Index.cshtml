@@ -1,5 +1,6 @@
-﻿@model User
-<h3>Cart</h3>
+﻿
+
+<h3>Order</h3>
 
 <form method="POST" asp-controller="Order" asp-action="UpdateTotal">
     <table>
@@ -46,7 +47,8 @@
 
             <span>@string.Format("{0:F2}", deliveryTax)</span>
             <td colspan="6" align="right">Total</td>
-            decimal total = ViewBag.total + Constant.DELIVERY_TAX;
+            ViewBag.total += deliveryTax;
+            decimal total = ViewBag.total;
             <td>@string.Format("{0:F2}", total)</td>
         }
 
@@ -56,34 +58,9 @@
     </table>
 </form>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-controller="Order" asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" value="@Model.FirstName" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" value="@Model.LastName" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeliveryAddress" class="control-label"></label>
-                <input asp-for="DeliveryAddress" class="form-control" value="@Model.DeliveryAddress" />
-                <span asp-validation-for="DeliveryAddress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <span>Will be delivered on @DateTime.Now.AddDays(3).ToShortDateString()</span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create order" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+@{ /*
+        
+         */}
 
 <a asp-controller="Game" asp-action="Index">Continue shopping</a>
-<a asp-controller="Cart" asp-action="Checkout">Checkout</a>
+<a asp-controller="Order" asp-action="ConfirmOrderDetails">>Confirm order details</a>

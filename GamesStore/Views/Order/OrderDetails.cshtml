@@ -1,0 +1,75 @@
+﻿@model OrderViewModel
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Platform</th>
+        <th>ImgUrl</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total</th>
+    </tr>
+    @{
+        if (Model.DiscountCode is null)
+        {
+            Model.TotalPrice += Constant.DELIVERY_TAX;
+        }
+        foreach (CartItem cartItem in Model.Cart)
+        {
+            <tr>
+                <td>@cartItem.GameInCart.Name</td>
+                <td>@cartItem.GameInCart.Platform</td>
+                <td><img src="@cartItem.GameInCart.ImgUrl" /></td>
+                <td>@cartItem.GameInCart.Price</td>
+                <td>@cartItem.GameInCart.Quantity</td>
+            </tr>
+        }
+
+    }
+    <td colspan="6">@Model.TotalPrice</td>
+    @{
+        if (Model.DiscountCode != null)
+        {
+            <span>Used discount code @Model.DiscountCode.Code for @Model.DiscountCode.DiscountPercentage% discount</span>
+        }
+    }
+</table>
+
+<h2>Delivery details</h2>
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.FirstName)
+    </dt>
+    <dd class="col-sm-10">
+        @Model.FirstName
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.LastName)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.LastName)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.DeliveryAddress)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.DeliveryAddress)
+    </dd>
+    @{
+        if (Model.PhoneNumber != null)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
+        }
+    }
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.DeliveryDate)
+    </dt>
+    <dd class="col-sm-10">
+        <span>@Model.DeliveryDate.ToLocalTime().ToShortDateString()</span>
+    </dd>
+</dl>
