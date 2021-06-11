@@ -174,6 +174,7 @@
             if (ModelState.IsValid)
             {
                 this.orderService.CreateOrder(orderViewModel);
+                RemoveAllSessions();
             }
 
             return View("OrderDetails", orderViewModel);
@@ -230,6 +231,14 @@
             OrderViewModel order = JsonConvert.DeserializeObject<OrderViewModel>(HttpContext.Session.GetString("order"));
 
             return order;
+        }
+
+        private void RemoveAllSessions()
+        {
+            HttpContext.Session.Remove("cart");
+            HttpContext.Session.Remove("discountCode");
+            HttpContext.Session.Remove("total");
+            HttpContext.Session.Remove("order");
         }
     }
 }

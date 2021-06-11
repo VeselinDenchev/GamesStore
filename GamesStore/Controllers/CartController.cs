@@ -37,9 +37,10 @@
 
             if (sessionKeyIsNotNull)
             {
-                List<CartItemViewModel> cart = DeserializeObject();
-                ViewBag.cart = cart;
-                ViewBag.total = cart.Sum(cartItem => cartItem.GameInCart.Price * cartItem.QuantityOfGame);
+                List<CartItemViewModel> cart = DeserializeCart();
+                //ViewBag.cart = cart;
+                //ViewBag.total = cart.Sum(cartItem => cartItem.GameInCart.Price * cartItem.QuantityOfGame);
+                return View(cart);
             }
 
             return View();
@@ -63,11 +64,20 @@
                     }
                 };
 
-                SerializeObject(cart);
+                bool isNotEnoughQuantityAvailable = !this.gameService.CheckIfGameQuantityIsEnough(game.Id, MIN_BUYABLE_QUANTITY_OF_GAME);
+
+                if (isNotEnoughQuantityAvailable)
+                {
+                    ViewBag.errorMessage = $"Not enough quantity of {game.Name} is available in stock!";
+                }
+
+                SerializeCart(cart);
+                //ViewBag.cart = cart;
+                return View("Index", cart);
             }
             else
             {
-                List<CartItemViewModel> cart = DeserializeObject();
+                List<CartItemViewModel> cart = DeserializeCart();
                 int index = Exists(id, cart);
                 bool isNotFound = index == NOT_FOUND_INDEX;
 
@@ -78,24 +88,44 @@
                         GameInCart = game,
                         QuantityOfGame = MIN_BUYABLE_QUANTITY_OF_GAME
                     });
+
+                    bool isNotEnoughQuantityAvailable = !this.gameService.CheckIfGameQuantityIsEnough(game.Id, MIN_BUYABLE_QUANTITY_OF_GAME);
+
+                    if (isNotEnoughQuantityAvailable)
+                    {
+                        ViewBag.errorMessage = $"Not enough quantity of {game.Name} is available in stock!";
+                    }
+
+                    SerializeCart(cart);
+                    //ViewBag.cart = cart;
+                    return View("Index", cart);
                 }
                 else
                 {
                     cart[index].QuantityOfGame++;
+
+                    int desiredQuantity = cart[index].QuantityOfGame;
+
+                    bool isNotEnoughQuantityAvailable = !this.gameService.CheckIfGameQuantityIsEnough(cart[index].GameId, desiredQuantity);
+
+                    if (isNotEnoughQuantityAvailable)
+                    {
+                        ViewBag.errorMessage = $"Not enough quantity of {game.Name} is available in stock!";
+                    }
                 }
 
-                SerializeObject(cart);
+                SerializeCart(cart);
+                //ViewBag.cart = cart;
+                return View("Index", cart);
             }
-
-            return RedirectToAction(INDEX_ACTION);
         }
 
         public IActionResult Remove(string id)
         {
-            List<CartItemViewModel> cart = DeserializeObject();
+            List<CartItemViewModel> cart = DeserializeCart();
             int index = Exists(id, cart);
             cart.RemoveAt(index);
-            SerializeObject(cart);
+            SerializeCart(cart);
 
             return RedirectToAction(INDEX_ACTION);
         }
@@ -103,31 +133,35 @@
         [HttpPost]
         public IActionResult UpdateGameQuantity(int[] quantity)
         {
-            List<CartItemViewModel> cart = DeserializeObject();
+            List<CartItemViewModel> cart = DeserializeCart();
 
             for (int i = 0; i < cart.Count; i++)
             {
-                cart[i].QuantityOfGame = quantity[i];
+                
+                bool isEnoughQuantityAvailable = this.gameService.CheckIfGameQuantityIsEnough(cart[i].GameId, quantity[i]);
+
+                if (isEnoughQuantityAvailable)
+                {
+                    cart[i].QuantityOfGame = quantity[i];
+                }
+                else
+                {
+                    GameViewModel game = this.gameService.FindGameById(cart[i].GameId);
+                    ViewBag.errorMessage = $"Not enough quantity of {game.Name} is available in stock!";
+                }
             }
 
-            SerializeObject(cart);
+            SerializeCart(cart);
 
-            return RedirectToAction(INDEX_ACTION);
+            return View("Index", cart);
         }
 
-        /*public IActionResult Checkout()
-        {
-            HttpContext.Session.Remove(SESSION_KEY);
-
-            return RedirectToAction(INDEX_ACTION, "Order");
-        }*/
-
-        private void SerializeObject(List<CartItemViewModel> cart)
+        private void SerializeCart(List<CartItemViewModel> cart)
         {
             HttpContext.Session.SetString(SESSION_KEY, JsonConvert.SerializeObject(cart));
         }
 
-        private List<CartItemViewModel> DeserializeObject()
+        private List<CartItemViewModel> DeserializeCart()
         {
             List<CartItemViewModel> cart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(HttpContext.Session.GetString(SESSION_KEY));
 

@@ -1,4 +1,5 @@
-﻿<h3>Cart</h3>
+﻿@model List<CartItemViewModel>
+<h3>Cart</h3>
 
 <form method="POST" asp-controller="Cart" asp-action="UpdateGameQuantity">
     <table>
@@ -11,7 +12,11 @@
             <th>Quantity <input type="submit" value="Update" /></th>
             <th>Total</th>
         </tr>
-        @foreach (CartItemViewModel cartItem in ViewBag.cart)
+        <p class="text-danger">@ViewBag.errorMessage</p>
+        @{
+            decimal total = 0;
+        }
+        @foreach (CartItemViewModel cartItem in Model)
         {
             <tr>
                 <a asp-controller="cart" asp-action="Remove" asp-route-id="@cartItem.GameInCart.Id">Remove</a>
@@ -21,11 +26,14 @@
                 <td>@cartItem.GameInCart.Price</td>
                 <td><input type="number" min="1" name="quantity" value="@cartItem.QuantityOfGame" /></td>
                 <td>@cartItem.TotalGamePrice</td>
+                @{
+                    total += cartItem.TotalGamePrice;
+                }
             </tr>
         }
         <tr>
             <td colspan="6" align="right">Total</td>
-            <td>@ViewBag.total</td>
+            <td>@total</td>
         </tr>
     </table>
 </form>

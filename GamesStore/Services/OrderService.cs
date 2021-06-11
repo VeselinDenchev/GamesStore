@@ -27,13 +27,14 @@
         public void CreateOrder(OrderViewModel order)
         {
             Order newOrder = PassDataFromViewModelToModelOrder(order);
-            /*foreach (CartItem cartItem in newOrder.Cart)
+            foreach (CartItem cartItem in newOrder.Cart)
             {
-                this.dbContext.Games.Find(cartItem.GameInCart).Quantity -= cartItem.QuantityOfGame;
-            }*/
+                this.dbContext.Attach(cartItem);
+                this.dbContext.Games.Find(cartItem.GameInCart.Id).Quantity -= cartItem.QuantityOfGame;
+            }
             this.dbContext.Attach(newOrder);
-
             this.dbContext.Orders.Add(newOrder);
+
             this.dbContext.SaveChanges();
         }
 

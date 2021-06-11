@@ -138,6 +138,23 @@ namespace GamesStore.Services
             return exists;
         }
 
+        public bool CheckIfGameQuantityIsEnough(string id, int desiredQuantity)
+        {
+            GameViewModel gameViewModel = FindGameById(id);
+
+            Game game = PassDataFromViewModelToModel(gameViewModel);
+
+            int availableQuantity = this.dbContext.Games.Find(game.Id).Quantity;
+
+            if (desiredQuantity > availableQuantity)
+            {
+                return false;
+            }
+
+            return true;
+
+        }
+
         private GameViewModel PassDataFromModelToViewModel(Game model)
         {
             GameViewModel viewModel = new GameViewModel()
