@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Data;
-using Model;
-using GamesStore.Services;
-using Model.ViewModels;
-using Microsoft.AspNetCore.Authorization;
-using Constants;
-
-namespace GamesStore.Controllers
+﻿namespace GamesStore.Controllers
 {
+    using System.Collections.Generic;
+    using Microsoft.AspNetCore.Mvc;
+    using GamesStore.Services;
+    using Model.ViewModels;
+    using Microsoft.AspNetCore.Authorization;
+    using Constants;
+
     public class DiscountCodeController : Controller
     {
         private readonly DiscountCodeService discountCodeService;
@@ -104,7 +97,7 @@ namespace GamesStore.Controllers
         }
 
         // POST: Game/Delete
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName(ActionName.DELETE)]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(string id)
         {

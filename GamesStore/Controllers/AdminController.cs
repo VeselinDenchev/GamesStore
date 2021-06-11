@@ -1,8 +1,6 @@
 ﻿namespace GamesStore.Controllers
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using Constants;
@@ -12,7 +10,6 @@
     using Microsoft.AspNetCore.Mvc;
 
     using Model;
-    using Model.ViewModels;
     using Model.ViewModels.Role;
 
     [Authorize(Roles = Role.ADMIN_ROLE)]
@@ -52,7 +49,7 @@
 
                 if (identityResult.Succeeded)
                 {
-                    return RedirectToAction("LoadAllRoles", "Admin");
+                    return RedirectToAction(ActionName.LOAD_ALL_ROLES, Role.ADMIN_ROLE);
                 }
 
                 foreach (IdentityError error in identityResult.Errors)
@@ -77,9 +74,9 @@
 
             if (role is null)
             {
-                ViewBag.ErrorMessage = $"Role with id = {id} cannot be found!";
+                ViewBag.ErrorMessage = string.Format(ErrorMessage.ROLE_NOT_FOUND, id); ;
 
-                return View("NotFound");
+                return View(ViewName.NOT_FOUND);
             }
 
             EditRoleViewModel editRoleViewModel = new EditRoleViewModel
@@ -102,9 +99,9 @@
 
             if (role is null)
             {
-                ViewBag.ErrorMessage = $"Role with id = {editRoleViewModel.Id} cannot be found!";
+                ViewBag.ErrorMessage = string.Format(ErrorMessage.ROLE_NOT_FOUND, editRoleViewModel.Id);
 
-                return View("NotFound");
+                return View(ViewName.NOT_FOUND);
             }
             else
             {
@@ -113,7 +110,7 @@
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("LoadAllRoles");
+                    return RedirectToAction(ActionName.LOAD_ALL_ROLES);
                 }
 
                 foreach (IdentityError error in result.Errors)
@@ -133,9 +130,9 @@
 
             if (role is null)
             {
-                ViewBag.ErrorMessage = $"Role with id = {roleId} cannot be found!";
+                ViewBag.ErrorMessage = string.Format(ErrorMessage.ROLE_NOT_FOUND, roleId);
 
-                return View("NotFound");
+                return View(ViewName.NOT_FOUND);
             }
 
             List<UserRoleViewModel> userRoleViewModels = new List<UserRoleViewModel>();
@@ -169,9 +166,9 @@
 
             if (role is null)
             {
-                ViewBag.ErrorMessage = $"Role with id = {roleId} cannot be found!";
+                ViewBag.ErrorMessage = string.Format(ErrorMessage.ROLE_NOT_FOUND, roleId);
 
-                return View("NotFound");
+                return View(ViewName.NOT_FOUND);
             }
 
             for (int i = 0; i < userRoleViewModels.Count; i++)
@@ -205,12 +202,12 @@
                     }
                     else
                     {
-                        return RedirectToAction("EditRole", new { Id = roleId });
+                        return RedirectToAction(ActionName.EDIT_ROLE, new { Id = roleId });
                     }
                 }
             }
 
-            return RedirectToAction("EditRole", new { Id = roleId });
+            return RedirectToAction(ActionName.EDIT_ROLE, new { Id = roleId });
         }
 
         [HttpPost]
@@ -220,9 +217,9 @@
 
             if (role is null)
             {
-                ViewBag.ErrorMessage = $"Role with id = {id} cannot be found!";
+                ViewBag.ErrorMessage = string.Format(ErrorMessage.ROLE_NOT_FOUND, id);
 
-                return View("NotFound");
+                return View(ViewName.NOT_FOUND);
             }
             else
             {
@@ -230,7 +227,7 @@
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("LoadAllRoles");
+                    return RedirectToAction(ActionName.LOAD_ALL_ROLES);
                 }
 
                 foreach (IdentityError error in result.Errors)
@@ -238,7 +235,7 @@
                     ModelState.AddModelError("", error.Description);
                 }
 
-                return View("LoadAllRoles");
+                return View(ViewName.LOAD_ALL_ROLES);
             }
         }
     }

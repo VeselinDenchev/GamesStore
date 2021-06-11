@@ -1,13 +1,9 @@
 ﻿namespace GamesStore.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
 
     using Data;
-
-    using Microsoft.AspNetCore.Identity;
 
     using Model;
     using Model.ViewModels;
@@ -27,15 +23,32 @@
         public void CreateOrder(OrderViewModel order)
         {
             Order newOrder = PassDataFromViewModelToModelOrder(order);
+
+            List<CartItem> cart = newOrder.Cart;
+
+            foreach (CartItem cartItem in cart)
+            {
+                this.dbContext.Attach(cartItem.GameInCart);
+                this.dbContext.CartItems.Add(cartItem);
+            }
+
             foreach (CartItem cartItem in newOrder.Cart)
             {
-                this.dbContext.Attach(cartItem);
                 this.dbContext.Games.Find(cartItem.GameInCart.Id).Quantity -= cartItem.QuantityOfGame;
             }
             this.dbContext.Attach(newOrder);
             this.dbContext.Orders.Add(newOrder);
 
             this.dbContext.SaveChanges();
+        }
+
+        public OrderViewModel FindOrderById(string id)
+        {
+            Order order = this.dbContext.Orders.FirstOrDefault(order => order.Id == id);
+
+            OrderViewModel orderViewModel = PassDataFromModelToViewModelOrder(order);
+
+            return orderViewModel;
         }
 
         public CartItem PassDataFromViewModelToModelCartItem(CartItemViewModel viewModel)
@@ -54,7 +67,7 @@
             return model;
         }
 
-        private OrderViewModel PassDataFromViewModelToModel(Order model)
+        private OrderViewModel PassDataFromModelToViewModelOrder(Order model)
         {
             OrderViewModel viewModel = new OrderViewModel()
             {
@@ -92,6 +105,5 @@
 
             return model;
         }
-
     }
 }

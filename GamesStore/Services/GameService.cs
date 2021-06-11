@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Data;
 
@@ -42,7 +41,7 @@ namespace GamesStore.Services
 
         public GameViewModel FindGameById(string id)
         {
-            Game game = this.dbContext.Games.FirstOrDefault(m => m.Id == id);
+            Game game = this.dbContext.Games.FirstOrDefault(game => game.Id == id);
 
             GameViewModel gameViewModel = PassDataFromModelToViewModel(game);
 
@@ -64,7 +63,7 @@ namespace GamesStore.Services
 
         public void SaveEditedGame(GameViewModel gameViewModel)
         {
-            Game game = this.dbContext.Games.FirstOrDefault(m => m.Id == gameViewModel.Id);
+            Game game = this.dbContext.Games.FirstOrDefault(game => game.Id == gameViewModel.Id);
 
             bool hasDifferentName = game.Name != gameViewModel.Name;
             bool hasDifferentPlatform = game.Platform != gameViewModel.Platform;

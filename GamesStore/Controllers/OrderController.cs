@@ -22,11 +22,6 @@
     [Authorize]
     public class OrderController : Controller
     {
-        private const string SESSION_KEY_CART = "cart";
-        private const string SESSION_KEY_TOTAL = "total";
-        private const string INDEX_ACTION = "Index";
-        private const string GAME_CONTROLLER = "Game";
-
         private readonly UserManager<User> userManager;
         private string userId;
         private readonly DiscountCodeService discountCodeService;
@@ -42,9 +37,7 @@
 
         public IActionResult Index()
         {
-            //ViewBag.userId = this.userManager.GetUserId(HttpContext.User);
-
-            bool sessionKeyCartIsNotNull = HttpContext.Session.GetString(SESSION_KEY_CART) != null;
+            bool sessionKeyCartIsNotNull = HttpContext.Session.GetString(Session.SESSION_KEY_CART) != null;
 
             if (sessionKeyCartIsNotNull)
             {
@@ -59,7 +52,7 @@
                     cart.Add(cartItem);
                 }
 
-                bool sessionKeyTotalIsNotNull = HttpContext.Session.GetString(SESSION_KEY_TOTAL) != null;
+                bool sessionKeyTotalIsNotNull = HttpContext.Session.GetString(Session.SESSION_KEY_TOTAL) != null;
                 string totalPriceString = null;
                 if (sessionKeyTotalIsNotNull)
                 {
@@ -76,23 +69,11 @@
                     SerializeTotalPrice(totalPriceString);
                 }
 
-                bool sessionKeyDiscountCodeIsNotNull = HttpContext.Session.GetString("discountCode") != null;
-                if (sessionKeyDiscountCodeIsNotNull)
-                {
-                    /*DiscountCodeViewModel discountCodeViewModel = DeserializeDiscountCode();
-                    DiscountCode discountCode = discountCodeService.PassDataFromViewModelToModel(discountCodeViewModel);*/
-
-                    
-
-                    //return View("ConfirmOrderDetails");
-                }
-
-                bool sessionKeyOrderIsNull = HttpContext.Session.GetString("order") == null;
+                bool sessionKeyOrderIsNull = HttpContext.Session.GetString(Session.SESSION_KEY_ORDER) == null;
                 if (sessionKeyOrderIsNull)
                 {
                     OrderViewModel order = new OrderViewModel()
                     {
-                        //User = user,
                         Cart = cart,
                         TotalPrice = ViewBag.total,
                     };
@@ -109,7 +90,7 @@
         {
             if (discountCodeEntered is null)
             {
-                return RedirectToAction(INDEX_ACTION);
+                return RedirectToAction(ActionName.INDEX);
             }
 
             List<CartItemViewModel> cart = DeserializeCart();
@@ -142,7 +123,7 @@
             SerializeCart(cart);
             SerializeTotalPrice(totalPriceString);
             
-            return RedirectToAction(INDEX_ACTION);
+            return RedirectToAction(ActionName.INDEX);
         }
 
         public async Task<IActionResult> ConfirmOrderDetails()
@@ -177,68 +158,74 @@
                 RemoveAllSessions();
             }
 
-            return View("OrderDetails", orderViewModel);
+            return View(ViewName.ORDER_DETAILS, orderViewModel);
         }
 
-        public IActionResult OrderDetails()
+        [Authorize(Roles = Role.USER_ROLE)]
+        public IActionResult OrderDetails(string orderId)
         {
-            return View();
+            OrderViewModel order = this.orderService.FindOrderById(orderId);
+
+            return View(order);
         }
 
         private void SerializeCart(List<CartItemViewModel> cart)
         {
-            HttpContext.Session.SetString(SESSION_KEY_CART, JsonConvert.SerializeObject(cart));
+            HttpContext.Session.SetString(Session.SESSION_KEY_CART, JsonConvert.SerializeObject(cart));
         }
 
         private List<CartItemViewModel> DeserializeCart()
         {
-            List<CartItemViewModel> cart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(HttpContext.Session.GetString(SESSION_KEY_CART));
+            List<CartItemViewModel> cart = JsonConvert
+                .DeserializeObject<List<CartItemViewModel>>(HttpContext.Session.GetString(Session.SESSION_KEY_CART));
 
             return cart;
         }
 
         private void SerializeTotalPrice(string totalPriceString)
         {
-            HttpContext.Session.SetString(SESSION_KEY_TOTAL, JsonConvert.SerializeObject(totalPriceString));
+            HttpContext.Session.SetString(Session.SESSION_KEY_TOTAL, JsonConvert.SerializeObject(totalPriceString));
         }
 
         private string DeserializeTotalPrice()
         {
-            string totalPriceString = JsonConvert.DeserializeObject<string>(HttpContext.Session.GetString(SESSION_KEY_TOTAL));
+            string totalPriceString = JsonConvert.DeserializeObject<string>(HttpContext.Session.GetString(Session.SESSION_KEY_TOTAL));
 
             return totalPriceString;
         }
 
         private void SerializeDiscountCode(DiscountCodeViewModel discountCode)
         {
-            HttpContext.Session.SetString("discountCode", JsonConvert.SerializeObject(discountCode));
+            HttpContext.Session.SetString(Session.SESSION_KEY_DISCOUNT_CODE, JsonConvert.SerializeObject(discountCode));
         }
 
         private DiscountCodeViewModel DeserializeDiscountCode()
         {
-            DiscountCodeViewModel discountCode = JsonConvert.DeserializeObject<DiscountCodeViewModel>(HttpContext.Session.GetString("discountCode"));
+            DiscountCodeViewModel discountCode = JsonConvert
+                .DeserializeObject<DiscountCodeViewModel>(HttpContext.Session.GetString(Session.SESSION_KEY_DISCOUNT_CODE));
 
             return discountCode;
         }
 
         private void SerializeOrder(OrderViewModel order)
         {
-            HttpContext.Session.SetString("order", JsonConvert.SerializeObject(order));
+            HttpContext.Session.SetString(Session.SESSION_KEY_ORDER, JsonConvert.SerializeObject(order));
         }
 
         private OrderViewModel DeserializeOrder()
         {
-            OrderViewModel order = JsonConvert.DeserializeObject<OrderViewModel>(HttpContext.Session.GetString("order"));
+            OrderViewModel order = JsonConvert
+                .DeserializeObject<OrderViewModel>(HttpContext.Session.GetString(Session.SESSION_KEY_ORDER));
 
             return order;
         }
 
         private void RemoveAllSessions()
         {
-            HttpContext.Session.Remove("cart");
-            HttpContext.Session.Remove("discountCode");
-            HttpContext.Session.Remove("total");
-            HttpContext.Session.Remove("order");
+            HttpContext.Session.Remove(Session.SESSION_KEY_CART);
+            HttpContext.Session.Remove(Session.SESSION_KEY_DISCOUNT_CODE);
+            HttpContext.Session.Remove(Session.SESSION_KEY_TOTAL);
+            HttpContext.Session.Remove(Session.SESSION_KEY_ORDER);
         }
     }
 }
