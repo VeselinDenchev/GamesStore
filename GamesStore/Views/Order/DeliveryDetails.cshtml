@@ -1,8 +1,13 @@
 ﻿@model OrderViewModel
 
+@{
+    ViewData["Title"] = "Delivery details";
+}
+
+<h3>Delivery details</h3>
 <div class="row">
     <div class="col-md-4">
-        <form method="POST" name="order" asp-controller="Order" asp-action="ConfirmOrderDetails" asp-route-firstName="@Model.User.FirstName"
+        <form method="POST" name="order" asp-controller="Order" asp-action="DeliveryDetails" asp-route-firstName="@Model.User.FirstName"
               asp-route-lastName="@Model.User.LastName" asp-route-deliveryAddress="@Model.User.DeliveryAddress" asp-route-phoneNumber="@Model.User.PhoneNumber">
             @{
                 decimal sumOfGamePricesNumber = 0;

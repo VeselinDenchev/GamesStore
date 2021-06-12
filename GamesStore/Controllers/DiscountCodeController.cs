@@ -37,7 +37,7 @@
             return View(discountCode);
         }
 
-        [Authorize(Roles = Role.ADMIN_ROLE)]
+        [Authorize(Roles = Role.ADMIN)]
         // GET: Game/Create
         public IActionResult Create()
         {
@@ -60,7 +60,7 @@
         }
 
 
-        [Authorize(Roles = Role.ADMIN_ROLE)]
+        [Authorize(Roles = Role.ADMIN)]
         // GET: Game/Edit
         public IActionResult Edit(string id)
         {
@@ -87,7 +87,7 @@
         }
 
 
-        [Authorize(Roles = Role.ADMIN_ROLE)]
+        [Authorize(Roles = Role.ADMIN)]
         // GET: Game/Delete
         public IActionResult Delete(string id)
         {

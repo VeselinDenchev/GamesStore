@@ -5,10 +5,9 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
-@if (signInManager.IsSignedIn(User) && User.IsInRole(Role.ADMIN_ROLE))
+@if (signInManager.IsSignedIn(User) && User.IsInRole(Role.ADMIN))
 {
+    <h1>Details</h1>
     <div>
         <h4>Game</h4>
         <hr />
@@ -47,7 +46,7 @@
                 @Html.DisplayNameFor(model => model.AgeRating)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.AgeRating)
+                @Html.DisplayFor(model => model.AgeRating)+
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Description)
@@ -94,27 +93,18 @@
 }
 else
 {
+    <div style="text-align:center">
+        <h1 style="margin-bottom: 3%"> @Html.DisplayFor(model => model.Name)</h1>
+        <img src="@Model.ImgUrl" style="width: 300px; height:375px;" />
+        <p style="text-align: left; margin-top: 3%; margin-bottom: 3%">@Html.DisplayFor(model => model.Description)</p>
+    </div>
     <div>
-        <h4>Game</h4>
-        <hr />
         <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Name)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Name)
-            </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Platform)
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Platform)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ImgUrl)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.ImgUrl)
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Developer)
@@ -126,13 +116,7 @@ else
                 @Html.DisplayNameFor(model => model.AgeRating)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.AgeRating)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Description)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Description)
+                @Html.DisplayFor(model => model.AgeRating)+
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.YearOfRelease)
@@ -148,9 +132,9 @@ else
             </dd>
         </dl>
     </div>
-    <a class="btn btn-primary" asp-controller="Cart" asp-action="Buy" asp-route-id="@Model.Id">Add to cart</a>
     <div>
-        <a asp-action="Index">Back to all games</a>
+        <a class="btn btn-primary" asp-controller="Cart" asp-action="Buy" asp-route-id="@Model.Id">Add to cart</a>
+        <a class="btn btn-secondary" style="margin-left: 2%" asp-action="Index">Back to all games</a>
     </div>
 }
 

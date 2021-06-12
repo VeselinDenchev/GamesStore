@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<User> singInManager;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -13,7 +15,6 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a asp-controller="Home" asp-action="Index"><img src="~/img/logo.png" width="80" height="45" /></a>
-                <!-- <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GamesStore</a> -->
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -24,8 +25,19 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Game" asp-action="Index">Games</a>
                         </li>
+                        @{
+                            if (singInManager.IsSignedIn(User) && User.IsInRole(Role.ADMIN))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="DiscountCode" asp-action="Index">Discount codes</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-dark" asp-controller="Admin" asp-action="LoadAllRoles">Manage roles</a>
+                                </li>
+                            }
+                         }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -40,7 +52,16 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - GamesStore - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - GamesStore - <a style="margin-left: 1%;" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+            <a style="margin-left: 1%;"  asp-controller="Game" asp-action="Index">Games</a>
+            @{
+                if (singInManager.IsSignedIn(User) && User.IsInRole(Role.ADMIN))
+                {
+                    <a style="margin-left: 1%;" asp-controller="DiscountCode" asp-action="Index">Discount codes</a>
+                    <a style="margin-left: 1%;" asp-controller="Admin" asp-action="LoadAllRoles">Manage roles</a>
+                }
+            }
+
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

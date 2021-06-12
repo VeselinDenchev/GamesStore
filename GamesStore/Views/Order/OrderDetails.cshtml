@@ -1,15 +1,19 @@
 ﻿@model OrderViewModel
 
-<table>
+@{
+    ViewData["Title"] = "Order details";
+}
+
+<h3>Order</h3>
+<table style="width: 100%">
     <tr>
-        <th>Name</th>
-        <th>Platform</th>
-        <th>ImgUrl</th>
-        <th>Price</th>
-        <th>Quantity</th>
-        <th>Total</th>
+        <th style="text-align: center">Name</th>
+        <th style="text-align: center">Price</th>
+        <th style="text-align: center">Quantity</th>
+        <th style="text-align: center">Total</th>
     </tr>
     @{
+        decimal defaultTotalPrice = 0;
         if (Model.DiscountCode is null)
         {
             Model.TotalPrice += Constant.DELIVERY_TAX;
@@ -17,20 +21,47 @@
         foreach (CartItem cartItem in Model.Cart)
         {
             <tr>
-                <td>@cartItem.GameInCart.Name</td>
-                <td>@cartItem.GameInCart.Platform</td>
-                <td><img src="@cartItem.GameInCart.ImgUrl" /></td>
-                <td>@cartItem.GameInCart.Price</td>
-                <td>@cartItem.GameInCart.Quantity</td>
+                <td><img src="@cartItem.GameInCart.ImgUrl" width="60" height="75" style="text-align:left; margin-right:2%; margin-bottom: 2%">@cartItem.GameInCart.Name</td>
+                <td style="text-align: center">@cartItem.GameInCart.Price</td>
+                <td style="text-align: center">@cartItem.QuantityOfGame</td>
+                <td style="text-align: center">@cartItem.TotalGamePrice</td>
+                @{
+                    defaultTotalPrice += cartItem.TotalGamePrice;
+                }
             </tr>
         }
 
     }
-    <td colspan="6">@Model.TotalPrice</td>
+    <tr>
+        @{
+            if (Model.DiscountCode != null)
+            {
+                decimal discount = defaultTotalPrice + Constant.DELIVERY_TAX - Model.TotalPrice;
+                <td class="text-danger" colspan="3" style="padding-top: 2%">Discount</td>
+                <td class="text-danger" style="text-align: center; padding-top: 2%">-@string.Format("{0:F2}", discount)</td>
+            }
+        }
+    </tr>
+    <tr>
+        <td style="padding-top: 2%" colspan="3">Delivery tax</td>
+        <td style="text-align: center; padding-top: 2%">@string.Format("{0:F2}", Constant.DELIVERY_TAX)</td>
+    </tr>
+    <tr>
+        <td colspan="4"><hr /></td>
+    </tr>
+    <tr>
+        <td colspan="3"></td>
+        @{
+            string totalPriceString = string.Format("{0:F2}", Model.TotalPrice);
+
+            <td style="text-align: center; font-weight: bold; font-size: 18px">@totalPriceString</td>
+        }
+    </tr>
+
     @{
         if (Model.DiscountCode != null)
         {
-            <span>Used discount code @Model.DiscountCode.Code for @Model.DiscountCode.DiscountPercentage% discount</span>
+            <p>Used discount code @Model.DiscountCode.Code for @Model.DiscountCode.DiscountPercentage% discount</p>
         }
     }
 </table>
@@ -41,7 +72,7 @@
         @Html.DisplayNameFor(model => model.FirstName)
     </dt>
     <dd class="col-sm-10">
-        @Model.FirstName
+        @Html.DisplayFor(model => model.FirstName)
     </dd>
     <dt class="col-sm-2">
         @Html.DisplayNameFor(model => model.LastName)

@@ -1,13 +1,13 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Order";
+}
 
 <h3>Order</h3>
 
 <form method="POST" asp-controller="Order" asp-action="UpdateTotal">
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Platform</th>
-            <th>ImgUrl</th>
+    <table style="width: 100%">
+        <tr style="text-align: center">
+            <th style="width: 40%">Game</th>
             <th>Price</th>
             <th>Quantity</th>
             <th>Total</th>
@@ -18,49 +18,67 @@
             foreach (CartItemViewModel cartItem in ViewBag.cart)
             {
                 <tr>
-                    <td>@cartItem.GameInCart.Name</td>
-                    <td>@cartItem.GameInCart.Platform</td>
-                    <td><img src="@cartItem.GameInCart.ImgUrl" width="60" height="75"></td>
-                    <td>@cartItem.GameInCart.Price</td>
-                    <td>@cartItem.QuantityOfGame</td>
-                    <td>@cartItem.TotalGamePrice</td>
-                 
+                    <td><img src="@cartItem.GameInCart.ImgUrl" width="60" height="75" style="text-align:left; margin-right:2%; margin-bottom: 2%">@cartItem.GameInCart.Name</td>
+                    <td style="text-align: center">@cartItem.GameInCart.Price</td>
+                    <td style="text-align: center">@cartItem.QuantityOfGame</td>
+                    <td style="text-align: center">@cartItem.TotalGamePrice</td>
+
                     @{
                         sumOfGamePrices += cartItem.TotalGamePrice;
                     }
-                        
+
                 </tr>
             }
 
-    <tr>
-        @{
-            bool areEqual = sumOfGamePrices == ViewBag.total;
-            if (areEqual)
-            {
-                string discountCodeEntered = null;
-                <input type="submit" value="Update" />
-                <input name="discountCodeEntered" value="@discountCodeEntered" />
+            <tr>
 
-            }
-            <lanel>Delivery tax</lanel>
-            decimal deliveryTax = Constant.DELIVERY_TAX;
+                @{
+                    decimal deliveryTax = Constant.DELIVERY_TAX;
 
-            <span>@string.Format("{0:F2}", deliveryTax)</span>
-            <td colspan="6" align="right">Total</td>
-            ViewBag.total += deliveryTax;
-            decimal total = ViewBag.total;
-            <td>@string.Format("{0:F2}", total)</td>
+                    bool areNotEqual = sumOfGamePrices != ViewBag.total;
+
+                    ViewBag.total += deliveryTax;
+                    decimal total = ViewBag.total;
+                }
+                @{
+                    if (areNotEqual)
+                    {
+                        decimal discount = sumOfGamePrices - ViewBag.total + Constant.DELIVERY_TAX;
+                        string discountString = string.Format("{0:F2}", discount);
+
+                    <tr>
+                        <td class="text-danger" colspan="3" style="padding-top: 2%">Discount</td>
+                        <td class="text-danger" style="text-align: center; padding-top: 2%">-@discountString</td>
+                    </tr>
+                }
+                }
+                <tr>
+                    <td style="padding-top: 2%" colspan="3">Delivery tax</td>
+                    <td style="text-align: center; padding-top: 2%">@string.Format("{0:F2}", deliveryTax)</td>
+                </tr>
+                <tr>
+                    <td style="padding-top: 1%" colspan="4"><hr /></td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td style="text-align: center; font-weight: bold; font-size: 18px">@string.Format("{0:F2}", total)</td>
+                </tr>
+                </tr>
+
         }
-
-
-    </tr>
-            }
     </table>
+    @{
+        bool areEqual = !areNotEqual;
+        if (areEqual)
+        {
+            string discountCodeEntered = null;
+            <div style="margin-top: 2%; text-align: center">
+                <label style="padding-top: 2%; margin-right: 5px">Discount code </label>
+                <input style="height: 10%" name="discountCodeEntered" value="@discountCodeEntered" />
+                <input class="btn btn-secondary" type="submit" value="Apply discount" style="margin-left:2%" />
+            </div>
+        }
+    }
 </form>
 
-@{ /*
-        
-         */}
-
-<a asp-controller="Game" asp-action="Index">Continue shopping</a>
-<a asp-controller="Order" asp-action="ConfirmOrderDetails">>Confirm order details</a>
+<a class="btn btn-primary" style="margin-top: 5%" asp-controller="Order" asp-action="DeliveryDetails">Confirm order details</a>

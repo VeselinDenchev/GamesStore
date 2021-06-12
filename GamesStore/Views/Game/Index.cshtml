@@ -2,13 +2,13 @@
 @inject SignInManager<User> signInManager;
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Games";
 }
 
-<h1>Index</h1>
+<h1>Games</h1>
 
 
-@if (signInManager.IsSignedIn(User) && User.IsInRole(Role.ADMIN_ROLE))
+@if (signInManager.IsSignedIn(User) && User.IsInRole(Role.ADMIN))
 {
     <p>
         <a asp-action="Create">Create New</a>
@@ -23,16 +23,10 @@
                     @Html.DisplayNameFor(model => model.Platform)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ImgUrl)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Developer)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.AgeRating)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.YearOfRelease)
@@ -62,16 +56,10 @@
                         @Html.DisplayFor(modelItem => item.Platform)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ImgUrl)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => item.Developer)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.AgeRating)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
+                        @Html.DisplayFor(modelItem => item.AgeRating)+
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.YearOfRelease)
@@ -102,18 +90,19 @@ else
 {
     foreach (var game in Model)
     {
-        <div class="card">
-            <div class="card-body">
-                <img src="@game.ImgUrl" width="350" height="375" />
+        <div class="card" style="display: inline-block; width: 350px; height: 400px; margin-top: 15px; margin-right: 15px;";>
+            <div style="text-align: center" class="card-body">
+                <div style="font-size: 17px; font-weight: bold; margin-bottom: 5%">@game.Name</div>
+                <img src="@game.ImgUrl" style="width: 175px; height: 219px; margin-bottom: 5%;" />
+                <div style="font-size: 15px">@game.Price</div>
             </div>
-            <div class="card-footer">
-                <span>@game.Name</span>
-                <spam>@game.Price</spam>
-                <a class="btn btn-primary" asp-controller="Cart" asp-action="Buy" asp-route-id="@game.Id">Add to cart</a>
-                <a class="btn btn" asp-controller="Game" asp-action="Details" asp-route-id="@game.Id">Details</a>
+            <div class="card-footer" style="display: inline-block; width:350px">
+                <div style="text-align: center">
+                    <a class="btn btn-primary" style="margin-right: 2%" asp-controller="Cart" asp-action="Buy" asp-route-id="@game.Id">Add to cart</a>
+                    <a class="btn btn-info" asp-controller="Game" asp-action="Details" asp-route-id="@game.Id">Details</a>
+                </div>
             </div>
         </div>
     }
-
 }
 

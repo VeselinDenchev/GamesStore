@@ -126,7 +126,7 @@
             return RedirectToAction(ActionName.INDEX);
         }
 
-        public async Task<IActionResult> ConfirmOrderDetails()
+        public async Task<IActionResult> DeliveryDetails()
         {
             OrderViewModel order = DeserializeOrder();
 
@@ -144,7 +144,7 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ConfirmOrderDetails(string firstName, string lastName, string deliveryAddress, string phoneNumber)
+        public IActionResult DeliveryDetails(string firstName, string lastName, string deliveryAddress, string phoneNumber)
         {
             OrderViewModel orderViewModel = DeserializeOrder();
             orderViewModel.FirstName = firstName;
@@ -161,7 +161,7 @@
             return View(ViewName.ORDER_DETAILS, orderViewModel);
         }
 
-        [Authorize(Roles = Role.USER_ROLE)]
+        [Authorize(Roles = Role.USER)]
         public IActionResult OrderDetails(string orderId)
         {
             OrderViewModel order = this.orderService.FindOrderById(orderId);

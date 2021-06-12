@@ -1,16 +1,19 @@
 ﻿@model List<CartItemViewModel>
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
 <h3>Cart</h3>
 
 <form method="POST" asp-controller="Cart" asp-action="UpdateGameQuantity">
-    <table>
-        <tr>
-            <th>Action</th>
-            <th>Name</th>
-            <th>Platform</th>
-            <th>ImgUrl</th>
+    <table style="width: 100%;">
+        <tr style="text-align: center">
+            <th style="width: 40%">Game</th>
             <th>Price</th>
-            <th>Quantity <input type="submit" value="Update" /></th>
+            <th>Quantity</th>
             <th>Total</th>
+            <th></th>
         </tr>
         <p class="text-danger">@ViewBag.ErrorMessage</p>
         @{
@@ -19,24 +22,29 @@
         @foreach (CartItemViewModel cartItem in Model)
         {
             <tr>
-                <a asp-controller="cart" asp-action="Remove" asp-route-id="@cartItem.GameInCart.Id">Remove</a>
-                <td>@cartItem.GameInCart.Name</td>
-                <td>@cartItem.GameInCart.Platform</td>
-                <td><img src="@cartItem.GameInCart.ImgUrl" width="60" height="75"></td>
-                <td>@cartItem.GameInCart.Price</td>
-                <td><input type="number" min="1" name="quantity" value="@cartItem.QuantityOfGame" /></td>
-                <td>@cartItem.TotalGamePrice</td>
-                @{
-                    total += cartItem.TotalGamePrice;
-                }
+                <td><img src="@cartItem.GameInCart.ImgUrl" width="60" height="75" style="text-align:left; margin-right:2%; margin-bottom: 3%">@cartItem.GameInCart.Name</td>
+                <td style="text-align: center">@cartItem.GameInCart.Price</td>
+                <td style="text-align: center"><input type="number" min="1" name="quantity" style="width: 15%" value="@cartItem.QuantityOfGame" /></td>
+                <td style="text-align: center">@cartItem.TotalGamePrice</td>
+                <td style="text-align: center"><a class="btn btn-danger" asp-controller="cart" asp-action="Remove" asp-route-id="@cartItem.GameInCart.Id">Remove</a></td>
+        @{
+            total += cartItem.TotalGamePrice;
+        }
             </tr>
         }
         <tr>
-            <td colspan="6" align="right">Total</td>
-            <td>@total</td>
+            <td colspan="2"></td>
+            <td style="text-align: center"><input class="btn btn-secondary" type="submit" value="Update" /></td>
+        </tr>
+        <tr>
+            <td style="padding-top: 1%" colspan="4"><hr /></td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">@total</td>
         </tr>
     </table>
 </form>
 
-<a asp-controller="Game" asp-action="Index">Continue shopping</a>
-<a asp-controller="Order" asp-action="Index">Checkout</a>
+<a style="margin-right: 1%" class="btn btn-primary" asp-controller="Game" asp-action="Index">Continue shopping</a>
+<a class="btn btn-success" asp-controller="Order" asp-action="Index">Checkout</a>

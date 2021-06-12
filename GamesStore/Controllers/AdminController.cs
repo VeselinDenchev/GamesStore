@@ -12,7 +12,7 @@
     using Model;
     using Model.ViewModels.Role;
 
-    [Authorize(Roles = Role.ADMIN_ROLE)]
+    [Authorize(Roles = Role.ADMIN)]
     public class AdminController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -49,7 +49,7 @@
 
                 if (identityResult.Succeeded)
                 {
-                    return RedirectToAction(ActionName.LOAD_ALL_ROLES, Role.ADMIN_ROLE);
+                    return RedirectToAction(ActionName.LOAD_ALL_ROLES, Role.ADMIN);
                 }
 
                 foreach (IdentityError error in identityResult.Errors)

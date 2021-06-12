@@ -39,7 +39,7 @@
             this.dbContext.Attach(newOrder);
             this.dbContext.Orders.Add(newOrder);
 
-            this.dbContext.SaveChanges();
+            //this.dbContext.SaveChanges();
         }
 
         public OrderViewModel FindOrderById(string id)

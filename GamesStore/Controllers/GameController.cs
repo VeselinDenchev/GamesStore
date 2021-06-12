@@ -41,7 +41,7 @@
             return View(game);
         }
 
-        [Authorize(Roles = Role.ADMIN_ROLE)]
+        [Authorize(Roles = Role.ADMIN)]
         // GET: Game/Create
         public IActionResult Create()
         {
@@ -63,7 +63,7 @@
             return View(game);
         }
 
-        [Authorize(Roles = Role.ADMIN_ROLE)]
+        [Authorize(Roles = Role.ADMIN)]
         // GET: Game/Edit
         public IActionResult Edit(string id)
         {
@@ -89,7 +89,7 @@
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = Role.ADMIN_ROLE)]
+        [Authorize(Roles = Role.ADMIN)]
         // GET: Game/Delete
         public IActionResult Delete(string id)
         {
