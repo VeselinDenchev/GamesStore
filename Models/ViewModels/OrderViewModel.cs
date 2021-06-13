@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
+    using Constants;
+
     public class OrderViewModel : BaseModel
     {
         public User User { get; set; }
@@ -33,7 +35,7 @@
         public string PhoneNumber { get; set; }
 
         [Display(Name = "Delivery date")]
-        public DateTime DeliveryDate => CreatedAtUtc.AddDays(3);
+        public DateTime DeliveryDate => CreatedAtUtc.AddDays(Delivery.DELIVERY_DAYS);
 }
 }
 

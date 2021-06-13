@@ -33,7 +33,7 @@
             <tr>
 
                 @{
-                    decimal deliveryTax = Constant.DELIVERY_TAX;
+                    decimal deliveryTax = Delivery.DELIVERY_TAX;
 
                     bool areNotEqual = sumOfGamePrices != ViewBag.total;
 
@@ -43,7 +43,7 @@
                 @{
                     if (areNotEqual)
                     {
-                        decimal discount = sumOfGamePrices - ViewBag.total + Constant.DELIVERY_TAX;
+                        decimal discount = sumOfGamePrices - ViewBag.total + Delivery.DELIVERY_TAX;
                         string discountString = string.Format("{0:F2}", discount);
 
                     <tr>

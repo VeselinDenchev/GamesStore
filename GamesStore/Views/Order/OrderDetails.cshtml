@@ -16,7 +16,7 @@
         decimal defaultTotalPrice = 0;
         if (Model.DiscountCode is null)
         {
-            Model.TotalPrice += Constant.DELIVERY_TAX;
+            Model.TotalPrice += Delivery.DELIVERY_TAX;
         }
         foreach (CartItem cartItem in Model.Cart)
         {
@@ -36,7 +36,7 @@
         @{
             if (Model.DiscountCode != null)
             {
-                decimal discount = defaultTotalPrice + Constant.DELIVERY_TAX - Model.TotalPrice;
+                decimal discount = defaultTotalPrice + Delivery.DELIVERY_TAX - Model.TotalPrice;
                 <td class="text-danger" colspan="3" style="padding-top: 2%">Discount</td>
                 <td class="text-danger" style="text-align: center; padding-top: 2%">-@string.Format("{0:F2}", discount)</td>
             }
@@ -44,7 +44,7 @@
     </tr>
     <tr>
         <td style="padding-top: 2%" colspan="3">Delivery tax</td>
-        <td style="text-align: center; padding-top: 2%">@string.Format("{0:F2}", Constant.DELIVERY_TAX)</td>
+        <td style="text-align: center; padding-top: 2%">@string.Format("{0:F2}", Delivery.DELIVERY_TAX)</td>
     </tr>
     <tr>
         <td colspan="4"><hr /></td>
@@ -104,3 +104,5 @@
         <span>@Model.DeliveryDate.ToLocalTime().ToShortDateString()</span>
     </dd>
 </dl>
+
+<h2 style="text-align: center; margin-top: 5%">Thank you for using GamesStore!</h2>

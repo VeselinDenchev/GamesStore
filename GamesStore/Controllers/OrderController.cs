@@ -113,7 +113,7 @@
                     DiscountCode discountCodeModel = discountCodeService.PassDataFromViewModelToModel(discountCode);
                     OrderViewModel order = DeserializeOrder();
                     order.TotalPrice *= (100 - discountCode.DiscountPercentage) / 100m;
-                    order.TotalPrice += Constant.DELIVERY_TAX;
+                    order.TotalPrice += Delivery.DELIVERY_TAX;
                     ViewBag.total = order.TotalPrice ;
                     order.DiscountCode = discountCodeModel;
                     SerializeOrder(order);
