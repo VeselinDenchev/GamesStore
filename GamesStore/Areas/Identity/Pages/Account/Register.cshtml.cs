@@ -24,9 +24,10 @@ namespace GamesStore.Areas.Identity.Pages.Account
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<User> userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> roleManager;
 
         public RegisterModel(
             UserManager<User> userManager,
@@ -34,10 +35,11 @@ namespace GamesStore.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
-            _userManager = userManager;
+            this.userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            //this.roleManager = 
         }
 
         [BindProperty]
@@ -105,12 +107,24 @@ namespace GamesStore.Areas.Identity.Pages.Account
                     DeliveryAddress = Input.DeliveryAddress,
                     PhoneNumber = Input.PhoneNumber
                 };
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                var result = await userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    string roleToBeAssigned = null;
+
+                    bool isFirstUser = this.userManager.Users.Count() == 1;
+                    if (isFirstUser)
+                    {
+                        roleToBeAssigned = Role.ADMIN;
+                    }
+                    else
+                    {
+                        roleToBeAssigned = Role.USER;
+                    }
+
                     _logger.LogInformation("User created a new account with password.");
 
-                    var addToRoleResult = await _userManager.AddToRoleAsync(user, Role.USER);
+                    var addToRoleResult = await userManager.AddToRoleAsync(user, roleToBeAssigned);
 
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

@@ -1,15 +1,14 @@
 ﻿namespace Data
 {
-    using System;
-
-    using Data.Seed;
-
     using Model;
 
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using System.Reflection;
+    using Microsoft.AspNetCore.Identity;
+    using Constants;
+    using Data.Seed;
 
     public class GamesStoreDbContext : IdentityDbContext<User>
     {
@@ -32,11 +31,13 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //SeedData seed = new SeedData();
+            //SeedData seed = new SeedData(modelBuilder);
 
             //modelBuilder = seed.GenerateModels(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
+
+            //seed.SeedRoles();
         }
     }
 }

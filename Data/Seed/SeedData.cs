@@ -1,20 +1,34 @@
-﻿
-
-namespace Data.Seed
+﻿namespace Data.Seed
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using Constants;
 
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
     public class SeedData
     {
-        public ModelBuilder GenerateModels(ModelBuilder modelBuilder)
+        public SeedData(ModelBuilder modelBuilder)
         {
-            return modelBuilder;
+            this.modelBuilder = modelBuilder;
+        }
+
+        public ModelBuilder modelBuilder { get; set; }
+
+        public ModelBuilder GenerateModels() => this.modelBuilder;
+
+        public void SeedRoles()
+        {
+            this.modelBuilder.Entity<IdentityRole>().HasData(
+                new IdentityRole 
+                { 
+                    Name = Role.ADMIN, 
+                    NormalizedName = Role.ADMIN.ToUpper() 
+                },
+                new IdentityRole 
+                {
+                    Name = Role.USER,
+                    NormalizedName = Role.USER.ToUpper()
+                });
         }
     }
 }

@@ -11,6 +11,8 @@
     {
         private readonly ILogger<HomeController> _logger;
 
+        //private readonly RolesManager
+
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -18,6 +20,11 @@
 
         public IActionResult Index()
         {
+            if (true)
+            {
+
+            }
+
             return View();
         }
 

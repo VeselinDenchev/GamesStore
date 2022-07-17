@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(GamesStoreDbContext))]
-    partial class GamesStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220716175006_Add_Admin_Role_Seed")]
+    partial class Add_Admin_Role_Seed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,17 +50,10 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "52f80c2d-a311-4ba3-994b-e111aa010801",
-                            ConcurrencyStamp = "9e75c950-75a7-4826-b0f9-ee545ac6dc74",
+                            Id = "28829b59-261f-43c0-9ee6-e35b3933d11e",
+                            ConcurrencyStamp = "6a64c3d2-9e4d-4e7c-bdef-26a1838161ae",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "84e829d0-76cd-4e9d-b9ef-0b45ef183839",
-                            ConcurrencyStamp = "27eb429b-09c0-4ca8-a0f4-7e04f0d49545",
-                            Name = "User",
-                            NormalizedName = "USER"
                         });
                 });
 
