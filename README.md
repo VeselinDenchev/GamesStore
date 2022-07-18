@@ -19,7 +19,7 @@ ASP.NET MVC University Course Project\
 
 &nbsp;&nbsp;&nbsp;&nbsp;Process of making an order:
 1. Open games page
-2. Add a desired game to cart by clicking the 'Ádd to cart' button. (User must be authenticated and in the role 'user' to make an order. If he is not authenticated and tries to buy a game, he gets redirected to the login page). After adding a game to cart, the user is redirected to the cart's page.
+2. Add a desired game to cart by clicking the 'Add to cart' button. (User must be authenticated and in the role 'user' to make an order. If he is not authenticated and tries to buy a game, he gets redirected to the login page). After adding a game to cart, the user is redirected to the cart's page.
 3. Change the desired game's quantity by changing the number in 'Quantity' column and afterwards clicking the 'Update' button (optional).
 4. Continue shopping by clicking the 'Continue shopping' button and repeat steps 2 and 3 while all desired games and their quantities are added to the cart (if you add a game that is already in the cart, its quantity get incremented by one) (optional).
 5. Go to the checkout page by clicking the 'Checkout' button.
