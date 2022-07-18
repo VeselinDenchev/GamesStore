@@ -1,6 +1,6 @@
 # GamesStore
 ASP.NET MVC University Course Project\
-&nbsp;&nbsp;&nbsp;&nbsp;**GamesStore** is an online gaming shop application. It is intened for all kinds of gamers - casual gamers, professionals or gaming enthusiasts. The app consists of the following models:
+&nbsp;&nbsp;&nbsp;&nbsp;**GamesStore** is an online gaming shop application. It is intened for all kinds of gamers - casual gamers, professionals or gaming enthusiasts. The app is developed with .NET 5. It consists of the following models:
 - Game\
 &nbsp;&nbsp;&nbsp;&nbsp;Every game has a name, platform, image URL (which associates the game with an image), developer, age rating, description, year of release, price, quantity and date and time of creation and last modification. Games are visible for both authenticated and non-authenticated users.
 - Discount code\
